@@ -42,7 +42,7 @@ export default {
                 })
                 .catch(function (error) {
                     commit('SET_PROCESSING', false)     // при ошибке кнопка disabled
-                    commit('SET_ERROR', error.message)     // при ошибке кнопка disabled  
+                    commit('SET_ERROR', error.message)      
                 })
         },
         STATE_CHANGED({ commit }, payload) {

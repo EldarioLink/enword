@@ -2,31 +2,32 @@
     <v-app id="inspire">
         <v-content>
             <v-container>
-                <v-layout align-center justify-end row fill-height>
+                <v-layout style="color:#009688;font-size:20px" align-center justify-end row fill-height>
     
-                    COUNTER: {{ getTimeRemaining }}
+                    TIME: {{ this.seconds }}
                 </v-layout>
-                <v-layout align-center justify-end row fill-height>
+                <v-layout style="color:#009688;font-size:20px" align-center justify-end row fill-height>
                     COUNTER: {{counter}}
                 </v-layout>
             </v-container>
             <v-container>
+                <v-layout style="color:#009688;font-size:20px" align-center justify-center row fill-height>
+                    {{ words.eng }}
+                </v-layout>
                 <v-container>
                     <v-layout align-center justify-center row fill-height>
     
-                        {{ words.eng }}
+                        <input @keyup.enter="submitans" placeholder="Введите перевод" @input="startTimer()" v-model="rusInput" style="border: solid 1px #009688">
     
                     </v-layout>
     
                 </v-container>
-                <v-container>
-                    <v-layout align-center justify-center row fill-height>
-    
-                        <input @keyup.enter="submitans" v-model="rusInput" autofocus style="border: solid 1px black">
-    
-                    </v-layout>
-    
-                </v-container>
+            </v-container>
+            <v-container>
+                <v-layout align-center justify-center row fill-height>
+                    <v-icon  @click.prevent="getHelp()" size="18">help</v-icon>
+                    <span class="success--text" v-if="this.showHelp" style="font-weight: bold"> {{words.rus}} </span>
+                </v-layout>
             </v-container>
     
         </v-content>
@@ -38,23 +39,53 @@
     export default {
         data() {
             return {
-                rusInput: undefined,
-                id: 1,
-                seconds: 59
+                minId: 1,
+                maxId: 22,
+                rusInput: null,
+                id: 3,
+                seconds: 59,
+                setInt: true,
+                showHelp: false
             }
         },
         methods: {
             submitans() {
-                (this.rusInput.toUpperCase().trim() === this.words.rus.toUpperCase()) ? this.$store.commit('increment'): console.log("no")
-     
-                if (this.id < 6) {
-                    this.id += 1
-                } else {
-                    this.id = 1
-                }
-                this.rusInput = ''
+                (this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase()) ?
+                this.$store.commit('incrementCounter'): console.log("no")
     
+                this.id = Math.floor(Math.random() * (this.maxId - this.minId)) + this.minId
+                this.rusInput = ''
+            },
+            counterNull() {
+                this.$store.commit('counterSetNull')
+            },
+            startTimer() {
+                if (this.setInt) {
+                    this.setInt = false
+                    var timeinterval = setInterval(() => {
+                        var t = this.seconds
+                        t = t - 1;
+                        this.seconds = t
+    
+                        if (t <= 0) {
+                            clearInterval(timeinterval);
+                            this.$router.push('/score')
+                        }
+    
+                    }, 1000);
+                }
             }, 
+            getHelp(){
+                return this.showHelp = !this.showHelp
+            }
+        },
+        mounted() {
+            this.$nextTick(() => {
+                this.counterNull()
+    
+                this.id = Math.floor(Math.random() * (this.maxId - this.minId)) + this.minId
+                console.log(this.maxId, this.minId);
+            })
         },
         computed: {
             words() {
@@ -63,20 +94,9 @@
             counter() {
                 return this.$store.getters.getCounter
             },
-            getTimeRemaining() { 
-                var t = this.seconds
-                var timeinterval = setInterval(function() {
-                    t = t - 1;
-                    console.log("he" + " " + t)
-                    if (t <= 0) {
-                        clearInterval(timeinterval);
-                    }
-                    return this.seconds  
-                }, 1000);
     
-            },
+        },
     
-        }
     }
 </script>
 

@@ -6,34 +6,44 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import firebaseConfig from './config/firebase'
 import firebase from 'firebase'
+import 'firebase/firestore'
 import VuetifyConfirm from 'vuetify-confirm'
-  
 
 
- 
+
+
 Vue.use(Vuetify)
 
 Vue.config.productionTip = false
-firebase.initializeApp(firebaseConfig);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const db = firebaseApp.firestore();
 
+db.settings({
+  timestampsInSnapshots: true
+});
+
+Vue.$db = db
 Vue.use(VuetifyConfirm, {
   buttonTrueText: 'Да',
-  buttonFalseText: 'Нет', 
-  width: 400, 
+  buttonFalseText: 'Нет',
+  width: 400,
 })
 
 
-new Vue({ 
+new Vue({
   router,
-  store,
+  store, 
   render: h => h(App),
-  created(){
+
+  created() {
     let vm = this
-    firebase.auth().onAuthStateChanged(function(user) {
-    
-     vm.$store.dispatch('STATE_CHANGED', user)
-        // User is signed out.
-        // ...
+    firebase.auth().onAuthStateChanged((user) => {
+
+      vm.$store.dispatch('STATE_CHANGED', user)
+      // User is signed out.
+      // ...
     });
-  }
+    this.$store.dispatch('LOAD_WORDS')
+  },
+
 }).$mount('#app')

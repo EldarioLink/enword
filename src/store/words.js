@@ -1,52 +1,53 @@
+import Vue from 'vue'
+
 export default {
-
-
     state: {
-        words: [
-            {
-                id: '1',
-                eng: 'car',
-                rus: 'машина'
-            },
-            {
-                id: '2',
-                eng: 'sink',
-                rus: 'раковина'
-            },
-            {
-                id: '3',
-                eng: 'fail',
-                rus: 'падения'
-            },
-            {
-                id: '4',
-                eng: 'roof',
-                rus: 'крыша'
-            },
-            {
-                id: '5',
-                eng: 'table',
-                rus: 'стол'
-            },
-            {
-                id: '6',
-                eng: 'chair',
-                rus: 'стул'
-            },
-        ],
-        counter: 1,
+        words: [],
+        counter: 0,
+        maxCounter: 0,
+        maxId: null
     },
     mutations: {
         SET_WORDS(state, payload) {
             state.words = payload
         },
-        increment(state) {
+        incrementCounter(state) {
             state.counter++
+        },
+        counterSetNull(state) {
+            state.counter = 0
+        },
+        setmaxCounter(state) {
+            state.maxCounter = Math.max(state.maxCounter, state.counter)
+        },
+    },
+    actions: {
+        LOAD_WORDS({ commit }) {
+            Vue.$db.collection('words')
+                .get()
+                .then(querySnapshot => {
+                    let words = []
+                    querySnapshot.forEach(s => {
+                        const data = s.data()
+                        let word = {
+                            id: data.id,
+                            eng: data.eng,
+                            rus: data.rus
+                        }
+                            
+                        words.push(word)
+                    })
+                    commit('SET_WORDS', words)
+
+                })
+                .catch(error => console.log(error))
         }
     },
     getters: {
         getWords: (state) => state.words,
         getCounter: (state) => state.counter,
+        getCounterMax: (state) => state.maxCounter,
+        getmaxId: (state) => state.maxId
     },
 
 }
