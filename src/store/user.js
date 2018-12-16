@@ -42,12 +42,13 @@ export default {
                 })
                 .catch(function (error) {
                     commit('SET_PROCESSING', false)     // при ошибке кнопка disabled
-                    commit('SET_ERROR', error.message)      
+                    commit('SET_ERROR', error.message)
                 })
         },
         STATE_CHANGED({ commit }, payload) {
             if (payload) {
                 commit('SET_USER', payload.uid)
+                commit('LOAD_USER_DATA', payload.uid)
 
             } else {
                 commit('UNSET_USER')
@@ -58,6 +59,7 @@ export default {
         }
     },
     getters: {
+        userId: (state) => state.user.uid,
         isUserAuthenticated: (state) => state.user.isAuthenticated
     }
 }

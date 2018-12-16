@@ -19,24 +19,28 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {}
-        },
-        computed: {
-            counterMax() {
-                return this.$store.getters.getCounterMax
-            },
-            counterNow() {
-                return this.$store.getters.getCounter
-            },
-        },
-        mounted() {
-            this.$store.commit('setmaxCounter')
-        }
+export default {
+  data() {
+    return {};
+  },
+  computed: {
+    counterMax() {
+      let maxScore = this.$store.getters.getCounterMax;
+      this.$store.dispatch("ADD_USER_BOOK", maxScore);
+      return maxScore;
+    },
+    counterNow() {
+      return this.$store.getters.getCounter;
+    },
+    yourmaxcounter() {
+      let maxScore = this.$store.getters.getCounterMax;
     }
+  },
+  mounted() {
+    this.$store.commit("setmaxCounter");
+  }
+};
 </script>
 
 <style scoped>
-    
 </style>

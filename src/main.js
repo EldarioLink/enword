@@ -7,9 +7,7 @@ import 'vuetify/dist/vuetify.min.css'
 import firebaseConfig from './config/firebase'
 import firebase from 'firebase'
 import 'firebase/firestore'
-import VuetifyConfirm from 'vuetify-confirm'
-
-
+import VuetifyConfirm from 'vuetify-confirm' 
 
 
 Vue.use(Vuetify)
@@ -34,7 +32,6 @@ new Vue({
   router,
   store, 
   render: h => h(App),
-
   created() {
     let vm = this
     firebase.auth().onAuthStateChanged((user) => {

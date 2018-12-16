@@ -36,6 +36,8 @@ export default {
                         }
                             
                         words.push(word)
+                       this.maxId =  words.length
+                    
                     })
                     commit('SET_WORDS', words)
 

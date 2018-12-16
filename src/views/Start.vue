@@ -11,8 +11,11 @@
                 </v-layout>
             </v-container>
             <v-container>
-                <v-layout style="color:#009688;font-size:20px" align-center justify-center row fill-height>
+                <v-layout v-if="words" style="color:#009688;font-size:20px" align-center justify-center row fill-height>
                     {{ words.eng }}
+                </v-layout>
+                <v-layout v-else align-center justify-center row fill-height>
+                    <v-icon>restore</v-icon>
                 </v-layout>
                 <v-container>
                     <v-layout align-center justify-center row fill-height>
@@ -25,8 +28,8 @@
             </v-container>
             <v-container>
                 <v-layout align-center justify-center row fill-height>
-                    <v-icon  @click.prevent="getHelp()" size="18">help</v-icon>
-                    <span class="success--text" v-if="this.showHelp" style="font-weight: bold"> {{words.rus}} </span>
+                    <v-icon @click.prevent="getHelp()" size="18">help</v-icon>
+                    <span class="success--text" @click.prevent="get()" v-if="this.showHelp" style="font-weight: bold"> {{words.rus}} </span>
                 </v-layout>
             </v-container>
     
@@ -40,64 +43,62 @@
         data() {
             return {
                 minId: 1,
-                maxId: 22,
+                maxId: 23,
                 rusInput: null,
                 id: 3,
                 seconds: 59,
                 setInt: true,
                 showHelp: false
-            }
+            };
         },
         methods: {
             submitans() {
-                (this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase()) ?
-                this.$store.commit('incrementCounter'): console.log("no")
-    
-                this.id = Math.floor(Math.random() * (this.maxId - this.minId)) + this.minId
-                this.rusInput = ''
+                this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase() ?
+                    this.$store.commit("incrementCounter") :
+                    console.log("no");
+
+                this.showHelp = false
+                
+                this.id =
+                    Math.floor(Math.random() * (this.maxId - this.minId)) + this.minId;
+
+                this.rusInput = "";
             },
             counterNull() {
-                this.$store.commit('counterSetNull')
+                this.$store.commit("counterSetNull");
             },
             startTimer() {
                 if (this.setInt) {
-                    this.setInt = false
+                    this.setInt = false;
                     var timeinterval = setInterval(() => {
-                        var t = this.seconds
+                        var t = this.seconds;
                         t = t - 1;
-                        this.seconds = t
-    
+                        this.seconds = t;
                         if (t <= 0) {
                             clearInterval(timeinterval);
-                            this.$router.push('/score')
+                            this.$router.push("/score");
                         }
-    
                     }, 1000);
                 }
-            }, 
-            getHelp(){
-                return this.showHelp = !this.showHelp
-            }
+            },
+            getHelp() {
+                return (this.showHelp = !this.showHelp);
+            },
         },
         mounted() {
             this.$nextTick(() => {
-                this.counterNull()
-    
-                this.id = Math.floor(Math.random() * (this.maxId - this.minId)) + this.minId
-                console.log(this.maxId, this.minId);
-            })
+                this.counterNull();
+            });
         },
         computed: {
             words() {
-                return this.$store.getters.getWords.find(b => b.id == this.id)
+                return this.$store.getters.getWords.find(b => b.id == this.id);
             },
             counter() {
-                return this.$store.getters.getCounter
-            },
-    
-        },
-    
-    }
+                return this.$store.getters.getCounter;
+            }
+        }
+    };
 </script>
 
 <style scoped>
