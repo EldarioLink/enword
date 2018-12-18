@@ -29,10 +29,9 @@
             <v-container>
                 <v-layout align-center justify-center row fill-height>
                     <v-icon @click.prevent="getHelp()" size="18">help</v-icon>
-                    <span class="success--text" @click.prevent="get()" v-if="this.showHelp" style="font-weight: bold"> {{words.rus}} </span>
+                    <span class="success--text" v-if="this.showHelp" style="font-weight: bold"> {{words.rus}} </span>
                 </v-layout>
-            </v-container>
-        <button @click="load">score load</button>
+            </v-container> 
     
         </v-content>
     
@@ -85,14 +84,11 @@ export default {
     },
     getHelp() {
       return (this.showHelp = !this.showHelp);
-    },
-    load() {  
-       this.$store.commit('lolo',22)
     }
   },
   mounted() {
     this.$nextTick(() => {
-      this.counterNull();   
+      this.counterNull();
     });
   },
   computed: {

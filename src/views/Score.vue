@@ -33,13 +33,15 @@ export default {
   },
 
   mounted() {
+    // Поставлен ли рекорд
     this.$store.commit("setmaxCounter");
 
-    let maxScoreinGame = this.$store.getters.getCounterMaxGame;
-    console.log(maxScoreinGame);
-
-    if (this.$store.getters.getCounterMax < this.$store.getters.getCounter) { 
-      this.$store.dispatch("ADD_USER_BOOK", maxScoreinGame); 
+    // Если рекорд, то сохраняем значение в firebase
+    if (this.$store.getters.getCounterMax < this.$store.getters.getCounter) {
+      this.$store.dispatch(
+        "ADD_USER_BOOK",
+        this.$store.getters.getCounterMaxGame
+      );
     }
   }
 };

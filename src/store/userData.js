@@ -1,12 +1,7 @@
 import Vue from 'vue'
 
-let defaultmaxScore = {
-
-}
-
 export default {
     state: {
-        userData: defaultmaxScore,
         counter: 0,
         maxCounter: 0,
         maxCounterGameMax: 0
@@ -67,7 +62,7 @@ export default {
 
             })
                 .then(() => {
-                    commit('ADD_USER_BOOK', payload )
+                    commit('ADD_USER_BOOK', payload)
                     commit('SET_PROCESSING', false)
                 })
                 .catch(() => {
@@ -77,7 +72,6 @@ export default {
     },
 
     getters: {
-        userData: (state) => state.userData,
         getCounter: (state) => state.counter,
         getCounterMax: (state) => state.maxCounter,
         getCounterMaxGame: (state) => state.maxCounterGameMax,
