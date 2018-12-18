@@ -1,6 +1,4 @@
 import Vue from 'vue'
-import { database } from 'firebase';
-import user from './user';
 
 let defaultmaxScore = {
 
@@ -11,8 +9,12 @@ export default {
         userData: defaultmaxScore,
         counter: 0,
         maxCounter: 0,
+        maxCounterGameMax: 0
     },
     mutations: {
+        lolo(state, payload) {
+            state.counter = payload;
+        },
         incrementCounter(state) {
             state.counter++
         },
@@ -20,13 +22,14 @@ export default {
             state.counter = 0
         },
         setmaxCounter(state) {
-            state.maxCounter = Math.max(state.counter)
+            state.maxCounterGameMax = Math.max(state.maxCounter, state.counter)
+            console.log(state.maxCounterGameMax, state.maxCounter, state.counter)
         },
         LOAD_USER_DATA(state, payload) {
-            state.userData = payload.maxScore
+            state.maxCounter = payload.maxScore
         },
         ADD_USER_BOOK(state, payload) {
-            Vue.set(state.userData, payload.maxScore)
+            state.maxCounter = payload
         }
     },
     actions: {
@@ -54,26 +57,29 @@ export default {
             commit('SET_PROCESSING', true)
             let userDataRef = Vue.$db.collection('userData').doc(getters.userId)
 
-
             let scoreAndDate = {
                 addedDate: new Date(),
                 maxScore: payload
             }
 
-
             userDataRef.set({
                 scoreAndDate
+
             })
                 .then(() => {
-                    commit('ADD_USER_BOOK', { scoreAndDate: scoreAndDate })
+                    commit('ADD_USER_BOOK', payload )
+                    commit('SET_PROCESSING', false)
                 })
+                .catch(() => {
+                    commit('SET_PROCESSING', false)
+                });
         }
     },
 
     getters: {
         userData: (state) => state.userData,
-        userDataAdd: (state) => state.userDataAdd,
         getCounter: (state) => state.counter,
         getCounterMax: (state) => state.maxCounter,
+        getCounterMaxGame: (state) => state.maxCounterGameMax,
     }
 }

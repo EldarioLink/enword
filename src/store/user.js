@@ -45,10 +45,10 @@ export default {
                     commit('SET_ERROR', error.message)
                 })
         },
-        STATE_CHANGED({ commit }, payload) {
+        STATE_CHANGED({ commit, dispatch }, payload) {
             if (payload) {
-                commit('SET_USER', payload.uid)
-                commit('LOAD_USER_DATA', payload.uid)
+                commit('SET_USER', payload.uid) 
+                dispatch('LOAD_USER_DATA', payload.uid);
 
             } else {
                 commit('UNSET_USER')

@@ -87,11 +87,12 @@ export default {
       return (this.showHelp = !this.showHelp);
     },
     load() {  
+       this.$store.commit('lolo',22)
     }
   },
   mounted() {
     this.$nextTick(() => {
-      this.counterNull();
+      this.counterNull();   
     });
   },
   computed: {
