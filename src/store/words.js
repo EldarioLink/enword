@@ -3,22 +3,11 @@ import Vue from 'vue'
 export default {
     state: {
         words: [],
-        counter: 0,
-        maxCounter: 0,
         maxId: null
     },
     mutations: {
         SET_WORDS(state, payload) {
             state.words = payload
-        },
-        incrementCounter(state) {
-            state.counter++
-        },
-        counterSetNull(state) {
-            state.counter = 0
-        },
-        setmaxCounter(state) {
-            state.maxCounter = Math.max(state.maxCounter, state.counter)
         },
     },
     actions: {
@@ -47,8 +36,6 @@ export default {
     },
     getters: {
         getWords: (state) => state.words,
-        getCounter: (state) => state.counter,
-        getCounterMax: (state) => state.maxCounter,
         getmaxId: (state) => state.maxId
     },
 

@@ -32,6 +32,7 @@
                     <span class="success--text" @click.prevent="get()" v-if="this.showHelp" style="font-weight: bold"> {{words.rus}} </span>
                 </v-layout>
             </v-container>
+        <button @click="load">score load</button>
     
         </v-content>
     
@@ -39,68 +40,70 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                minId: 1,
-                maxId: 23,
-                rusInput: null,
-                id: 3,
-                seconds: 59,
-                setInt: true,
-                showHelp: false
-            };
-        },
-        methods: {
-            submitans() {
-                this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase() ?
-                    this.$store.commit("incrementCounter") :
-                    console.log("no");
-
-                this.showHelp = false
-                
-                this.id =
-                    Math.floor(Math.random() * (this.maxId - this.minId)) + this.minId;
-
-                this.rusInput = "";
-            },
-            counterNull() {
-                this.$store.commit("counterSetNull");
-            },
-            startTimer() {
-                if (this.setInt) {
-                    this.setInt = false;
-                    var timeinterval = setInterval(() => {
-                        var t = this.seconds;
-                        t = t - 1;
-                        this.seconds = t;
-                        if (t <= 0) {
-                            clearInterval(timeinterval);
-                            this.$router.push("/score");
-                        }
-                    }, 1000);
-                }
-            },
-            getHelp() {
-                return (this.showHelp = !this.showHelp);
-            },
-        },
-        mounted() {
-            this.$nextTick(() => {
-                this.counterNull();
-            });
-        },
-        computed: {
-            words() {
-                return this.$store.getters.getWords.find(b => b.id == this.id);
-            },
-            counter() {
-                return this.$store.getters.getCounter;
-            }
-        }
+import { mapGetters } from "vuex";
+export default {
+  data() {
+    return {
+      minId: 1,
+      maxId: 23,
+      rusInput: null,
+      id: 3,
+      seconds: 59,
+      setInt: true,
+      showHelp: false
     };
+  },
+  methods: {
+    submitans() {
+      this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase()
+        ? this.$store.commit("incrementCounter")
+        : console.log("no");
+
+      this.showHelp = false;
+
+      this.id =
+        Math.floor(Math.random() * (this.maxId - this.minId)) + this.minId;
+
+      this.rusInput = "";
+    },
+    counterNull() {
+      this.$store.commit("counterSetNull");
+    },
+    startTimer() {
+      if (this.setInt) {
+        this.setInt = false;
+        var timeinterval = setInterval(() => {
+          var t = this.seconds;
+          t = t - 1;
+          this.seconds = t;
+          if (t <= 0) {
+            clearInterval(timeinterval);
+            this.$router.push("/score");
+          }
+        }, 1000);
+      }
+    },
+    getHelp() {
+      return (this.showHelp = !this.showHelp);
+    },
+    load() {  
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.counterNull();
+    });
+  },
+  computed: {
+    words() {
+      return this.$store.getters.getWords.find(b => b.id == this.id);
+    },
+    counter() {
+      return this.$store.getters.getCounter;
+    }
+  }
+};
 </script>
 
 <style scoped>
-    
 </style>
