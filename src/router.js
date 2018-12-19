@@ -9,6 +9,7 @@ import Signup from './views/Signup.vue'
 import Signin from './views/Signin.vue'  
 import Start from './views/Start.vue'  
 import Store from './store'  
+import addword from './views/addword.vue'  
 
 
 
@@ -43,7 +44,12 @@ export default new Router ({
             name: 'start',
             component: Start
           },
-       
+          {
+            path: '/addword',
+            name: 'addword',
+            component: addword
+          },
+          
 
     ],
     mode: 'history'

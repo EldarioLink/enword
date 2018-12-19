@@ -55,9 +55,8 @@ export default {
   },
   methods: {
     submitans() {
-      this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase()
-        ? this.$store.commit("incrementCounter")
-        : false;
+      if (this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase())
+        this.$store.commit("incrementCounter");
 
       this.showHelp = false;
 

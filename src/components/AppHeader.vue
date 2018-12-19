@@ -35,71 +35,79 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        drawer: false,
-        counter: null
-      }
+export default {
+  data() {
+    return {
+      drawer: false,
+      counter: null
+    };
+  },
+  computed: {
+    isUserAuthenticated() {
+      return this.$store.getters.isUserAuthenticated;
     },
-    computed: {
-      isUserAuthenticated() {
-        return this.$store.getters.isUserAuthenticated
-      },
-  
-      menuItems() {
-        return this.isUserAuthenticated ? [{
-              icon: 'reply',
-              title: 'Начать',
-              route: '/start'
+
+    menuItems() {
+      return this.isUserAuthenticated
+        ? [
+            {
+              icon: "library_add",
+              title: "Добавить слово",
+              route: "/addword"
             },
             {
-              icon: 'trending_up',
-              title: 'Ваш рекорд',
-              route: '/score'
+              icon: "reply",
+              title: "Начать",
+              route: "/start"
+            },
+            {
+              icon: "trending_up",
+              title: "Ваш рекорд",
+              route: "/score"
             }
-  
-          ] :
-  
-          [{
-              icon: 'reply',
-              title: 'Начать',
-              route: '/start'
-            }, 
-            {
-              icon: 'trending_up',
-              title: 'Ваш рекорд',
-              route: '/score'
-            },
-            {
-              icon: 'input',
-              title: 'Войти',
-              route: '/signin'
-            },
-            {
-              icon: 'lock_open',
-              title: 'Зарегистрироваться',
-              route: '/signup'
-            }
-  
           ]
-      }
+        : [
+            {
+              icon: "reply",
+              title: "Начать",
+              route: "/start"
+            },
+            {
+              icon: "trending_up",
+              title: "Ваш рекорд",
+              route: "/score"
+            },
+            {
+              icon: "input",
+              title: "Войти",
+              route: "/signin"
+            },
+            {
+              icon: "lock_open",
+              title: "Зарегистрироваться",
+              route: "/signup"
+            },
+            {
+              icon: "lock_open",
+              title: "Зарегистрироваться",
+              route: "/signup"
+            }
+          ];
+    }
+  },
+  methods: {
+    signout() {
+      this.$confirm("Вы действительно хотите выйти?").then(res => {
+        if (res) this.$store.dispatch("SIGNOUT");
+      });
     },
-    methods: {
-      signout() {
-        this.$confirm('Вы действительно хотите выйти?').then(res => {
-          if (res) this.$store.dispatch('SIGNOUT')
-  
-        })
-      },
-      coun(id) {
-        this.counter = id 
-      }
-    },
+    coun(id) {
+      this.counter = id;
+    }
   }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  
 </style>
