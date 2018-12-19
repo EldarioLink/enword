@@ -93,8 +93,7 @@
         })
       },
       coun(id) {
-        this.counter = id
-        console.log("head:" + id)
+        this.counter = id 
       }
     },
   }

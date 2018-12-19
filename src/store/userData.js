@@ -17,8 +17,7 @@ export default {
             state.counter = 0
         },
         setmaxCounter(state) {
-            state.maxCounterGameMax = Math.max(state.maxCounter, state.counter)
-            console.log(state.maxCounterGameMax, state.maxCounter, state.counter)
+            state.maxCounterGameMax = Math.max(state.maxCounter, state.counter) 
         },
         LOAD_USER_DATA(state, payload) {
             state.maxCounter = payload.maxScore

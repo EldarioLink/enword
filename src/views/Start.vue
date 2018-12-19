@@ -57,7 +57,7 @@ export default {
     submitans() {
       this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase()
         ? this.$store.commit("incrementCounter")
-        : console.log("no");
+        : false;
 
       this.showHelp = false;
 
@@ -73,7 +73,6 @@ export default {
       if (this.setInt) {
         this.setInt = false;
         this.timeinterval = setInterval(() => {
-          console.log(this.timeinterval);
           var t = this.seconds;
           t = t - 1;
           this.seconds = t;
