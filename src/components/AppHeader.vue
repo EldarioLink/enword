@@ -51,11 +51,6 @@ export default {
       return this.isUserAuthenticated
         ? [
             {
-              icon: "library_add",
-              title: "Добавить слово",
-              route: "/addword"
-            },
-            {
               icon: "reply",
               title: "Начать",
               route: "/start"
