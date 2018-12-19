@@ -35,59 +35,69 @@
 </template>
 
 <script>
-   export default {
-     data() {
-       return {
-         drawer: false,
-         counter: null
-       }
-     },
-     computed: {
-       isUserAuthenticated() {
-         return this.$store.getters.isUserAuthenticated
-       },
+  export default {
+    data() {
+      return {
+        drawer: false,
+        counter: null
+      }
+    },
+    computed: {
+      isUserAuthenticated() {
+        return this.$store.getters.isUserAuthenticated
+      },
   
-       menuItems() {
-         return this.isUserAuthenticated ? [{
-               icon: 'reply',
-               title: 'Начать',
-               route: '/start'
-             },
-             {
-               icon: 'trending_up',
-               title: 'Ваш рекорд',
-               route: '/score'
-             }
+      menuItems() {
+        return this.isUserAuthenticated ? [{
+              icon: 'reply',
+              title: 'Начать',
+              route: '/start'
+            },
+            {
+              icon: 'trending_up',
+              title: 'Ваш рекорд',
+              route: '/score'
+            }
   
-           ] :
+          ] :
   
-           [{
-               icon: 'input',
-               title: 'Войти',
-               route: '/signin'
-             },
-             {
-               icon: 'lock_open',
-               title: 'Зарегистрироваться',
-               route: '/signup'
-             }
+          [{
+              icon: 'reply',
+              title: 'Начать',
+              route: '/start'
+            }, 
+            {
+              icon: 'trending_up',
+              title: 'Ваш рекорд',
+              route: '/score'
+            },
+            {
+              icon: 'input',
+              title: 'Войти',
+              route: '/signin'
+            },
+            {
+              icon: 'lock_open',
+              title: 'Зарегистрироваться',
+              route: '/signup'
+            }
   
-           ]
-       }
-     },
-     methods: {
-       signout() {
-         this.$confirm('Вы действительно хотите выйти?').then(res => {
-           if (res) this.$store.dispatch('SIGNOUT')
+          ]
+      }
+    },
+    methods: {
+      signout() {
+        this.$confirm('Вы действительно хотите выйти?').then(res => {
+          if (res) this.$store.dispatch('SIGNOUT')
   
-         })
-       },
-       coun(id) {
-         this.counter = id
-         console.log("head:" + id)
-       }
-     },
-   }
+        })
+      },
+      coun(id) {
+        this.counter = id
+        console.log("head:" + id)
+      }
+    },
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

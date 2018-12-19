@@ -24,15 +24,17 @@ export default {
     return {};
   },
   computed: {
+    // Возвращаем рекорд
     counterMax() {
       return this.$store.getters.getCounterMaxGame;
     },
+    // Текущий счёт
     counterNow() {
       return this.$store.getters.getCounter;
     }
   },
 
-  mounted() {
+  mounted() {  
     // Поставлен ли рекорд
     this.$store.commit("setmaxCounter");
 

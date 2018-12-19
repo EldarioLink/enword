@@ -34,11 +34,8 @@ new Vue({
   render: h => h(App),
   created() {
     let vm = this
-    firebase.auth().onAuthStateChanged((user) => {
-
-      vm.$store.dispatch('STATE_CHANGED', user)
-      // User is signed out.
-      // ...
+    firebase.auth().onAuthStateChanged((user) => {  
+      vm.$store.dispatch('STATE_CHANGED', user) 
     });
     this.$store.dispatch('LOAD_WORDS')
   },

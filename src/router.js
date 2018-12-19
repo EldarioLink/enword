@@ -26,8 +26,7 @@ export default new Router ({
          path: '/score',
          name: 'score',
          component: Score,
-         props: true,
-         beforeEnter: AuthGuard
+         props: true, 
         },
         {
           path: '/signin',

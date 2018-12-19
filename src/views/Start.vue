@@ -49,7 +49,8 @@ export default {
       id: 3,
       seconds: 59,
       setInt: true,
-      showHelp: false
+      showHelp: false,
+      timeinterval: undefined
     };
   },
   methods: {
@@ -71,12 +72,13 @@ export default {
     startTimer() {
       if (this.setInt) {
         this.setInt = false;
-        var timeinterval = setInterval(() => {
+        this.timeinterval = setInterval(() => {
+          console.log(this.timeinterval);
           var t = this.seconds;
           t = t - 1;
           this.seconds = t;
           if (t <= 0) {
-            clearInterval(timeinterval);
+            clearInterval(this.timeinterval);
             this.$router.push("/score");
           }
         }, 1000);
@@ -90,6 +92,9 @@ export default {
     this.$nextTick(() => {
       this.counterNull();
     });
+  },
+  destroyed() {
+    clearInterval(this.timeinterval);
   },
   computed: {
     words() {
