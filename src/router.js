@@ -47,10 +47,10 @@ export default new Router ({
           {
             path: '/addword',
             name: 'addword',
-            component: addword
+            component: addword,
+            beforeEnter: AuthGuard
           },
-          
-
+           
     ],
     mode: 'history'
 })

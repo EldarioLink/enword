@@ -20,7 +20,7 @@
   
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn v-for="(item,i) in menuItems" flat :key="`menuitem${i}`" :coun="coun" :counter="counter" :to="item.route">
+        <v-btn v-for="(item,i) in menuItems" flat :key="`menuitem${i}`" :to="item.route">
           <v-icon left v-html="item.icon"></v-icon>
           {{item.title}}
         </v-btn>
@@ -86,12 +86,7 @@ export default {
               icon: "lock_open",
               title: "Зарегистрироваться",
               route: "/signup"
-            },
-            {
-              icon: "lock_open",
-              title: "Зарегистрироваться",
-              route: "/signup"
-            }
+            }, 
           ];
     }
   },

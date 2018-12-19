@@ -16,6 +16,10 @@
         <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
           <input style="border: solid 1px #009688">
         </v-layout>
+       
+        <v-layout mt-4 align-center justify-center row > 
+        <v-btn color="success">Добавить</v-btn>
+        </v-layout>
       </v-container>
     </v-content>
   
@@ -23,13 +27,12 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {};
-    }
-  };
+export default {
+  data() {
+    return {};
+  }
+};
 </script>
 
 <style scoped>
-  
 </style>
