@@ -5,7 +5,9 @@
                 <v-layout style="color:#009688;font-size:20px" align-center justify-center row fill-height>
                     YOUR SCORE IS {{ counterNow }}
                 </v-layout>
+            </v-container>
                 <v-divider></v-divider>
+                <v-container v-if="this.$store.getters.userId">
                 <v-layout  style="color:#009688;font-size:20px" align-center justify-center row fill-height>
                     YOUR MAX SCORE IS
                 </v-layout>
@@ -34,16 +36,18 @@ export default {
     }
   },
 
-  mounted() {  
-    // Поставлен ли рекорд
-    this.$store.commit("setmaxCounter");
+  mounted() {
+    if (this.$store.getters.userId) {
+      // Поставлен ли рекорд
+      this.$store.commit("setmaxCounter");
 
-    // Если рекорд, то сохраняем значение в firebase
-    if (this.$store.getters.getCounterMax < this.$store.getters.getCounter) {
-      this.$store.dispatch(
-        "ADD_USER_BOOK",
-        this.$store.getters.getCounterMaxGame
-      );
+      // Если рекорд, то сохраняем значение в firebase
+      if (this.$store.getters.getCounterMax < this.$store.getters.getCounter) {
+        this.$store.dispatch(
+          "ADD_USER_BOOK",
+          this.$store.getters.getCounterMaxGame
+        );
+      }
     }
   }
 };
