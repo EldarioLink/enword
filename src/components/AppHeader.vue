@@ -35,22 +35,20 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      drawer: false,
-      counter: null
-    };
-  },
-  computed: {
-    isUserAuthenticated() {
-      return this.$store.getters.isUserAuthenticated;
+  export default {
+    data() {
+      return {
+        drawer: false,
+        counter: null
+      };
     },
-
-    menuItems() {
-      return this.isUserAuthenticated
-        ? [
-            {
+    computed: {
+      isUserAuthenticated() {
+        return this.$store.getters.isUserAuthenticated;
+      },
+      menuItems() {
+        return this.isUserAuthenticated ?
+          [{
               icon: "reply",
               title: "Начать",
               route: "/start"
@@ -60,9 +58,8 @@ export default {
               title: "Ваш рекорд",
               route: "/score"
             }
-          ]
-        : [
-            {
+          ] :
+          [{
               icon: "reply",
               title: "Начать",
               route: "/start"
@@ -81,23 +78,26 @@ export default {
               icon: "lock_open",
               title: "Зарегистрироваться",
               route: "/signup"
-            }, 
+            },
           ];
-    }
-  },
-  methods: {
-    signout() {
-      this.$confirm("Вы действительно хотите выйти?").then(res => {
-        if (res) this.$store.dispatch("SIGNOUT");
-      });
+      }
     },
-    coun(id) {
-      this.counter = id;
+    methods: {
+      signout() {
+        this.$confirm("Вы действительно хотите выйти?").then(res => {
+          if (res)
+            this.$store.dispatch("SIGNOUT");
+          this.$router.push("/signin");
+        });
+      },
+      coun(id) {
+        this.counter = id;
+      }
     }
-  }
-};
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  
 </style>

@@ -8,7 +8,7 @@ export default {
     state: {
         counter: 0,
         maxCounter: 0,
-        maxCounterGameMax: 0
+        maxCounterGameMax: 0,
     },
     mutations: {
         lolo(state, payload) {
@@ -28,11 +28,12 @@ export default {
         },
         ADD_USER_BOOK(state, payload) {
             state.maxCounter = payload
-        }
+        },
     },
     actions: {
         LOAD_USER_DATA({ commit }, payload) {
             commit('SET_PROCESSING', true)
+            
             let userDataRef = Vue.$db.collection('userData').doc(payload)
 
             userDataRef.get()

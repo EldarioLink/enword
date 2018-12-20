@@ -43,75 +43,72 @@
 </template>
 
 <script>
-  import {
-    mapGetters
-  } from "vuex";
-  export default {
-    data() {
-      return {
-        minId: 1,
-        maxId: 23,
-        rusInput: null,
-        id: 3,
-        seconds: 59,
-        setInt: true,
-        showHelp: false,
-        timeinterval: undefined
-      };
-    },
-    methods: {
-      submitans() {
-        if (this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase())
-          this.$store.commit("incrementCounter");
+   export default {
+     data() {
+       return {
+         minId: 1,
+         maxId: 23,
+         rusInput: null,
+         id: 3,
+         seconds: 59,
+         setInt: true,
+         showHelp: false,
+         timeinterval: undefined
+       };
+     },
+     methods: {
+       submitans() {
+         if (this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase())
+           this.$store.commit("incrementCounter");
   
-        this.showHelp = false;
+         this.showHelp = false;
   
-        this.id =
-          Math.floor(Math.random() * (this.maxId - this.minId)) + this.minId;
+         this.id =
+           Math.floor(Math.random() * (this.maxId - this.minId)) + this.minId;
   
-        this.rusInput = "";
-      },
-      counterNull() {
-        this.$store.commit("counterSetNull");
-      },
-      startTimer() {
-        if (this.setInt) {
-          this.setInt = false;
-          this.timeinterval = setInterval(() => {
-            var t = this.seconds;
-            t = t - 1;
-            this.seconds = t;
-            if (t <= 0) {
-              clearInterval(this.timeinterval);
-              this.$router.push("/score");
-            }
-          }, 1000);
-        }
-      },
-      getHelp() {
-        return (this.showHelp = !this.showHelp);
-      },
-      addWords(){
-        this.$router.push("/addword");
-      }
-    },
-    mounted() {
-      this.$nextTick(() => {
-        this.counterNull();
-      });
-    },
-    destroyed() {
-      clearInterval(this.timeinterval);
-    },
-    computed: {
-      words() {
-        return this.$store.getters.getWords.find(b => b.id == this.id);
-      },
-      counter() {
-        return this.$store.getters.getCounter;
-      }
-    }
-  };
+         this.rusInput = "";
+       },
+       counterNull() {
+         this.$store.commit("counterSetNull");
+       },
+       startTimer() {
+         if (this.setInt) {
+           this.setInt = false;
+           this.timeinterval = setInterval(() => {
+             var t = this.seconds;
+             t = t - 1;
+             this.seconds = t;
+             if (t <= 0) {
+               clearInterval(this.timeinterval);
+               this.$router.push("/score");
+             }
+           }, 1000);
+         }
+       },
+       getHelp() {
+         return (this.showHelp = !this.showHelp);
+       },
+       addWords() {
+         this.$router.push("/addword");
+       }
+     },
+     mounted() {
+       this.$nextTick(() => {
+         this.counterNull();
+       });
+     },
+     destroyed() {
+       clearInterval(this.timeinterval);
+     },
+     computed: {
+       words() {
+         return this.$store.getters.getWords.find(b => b.id == this.id);
+       },
+       counter() {
+         return this.$store.getters.getCounter;
+       }
+     }
+   };
 </script>
 
 <style scoped>
