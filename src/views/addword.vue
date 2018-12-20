@@ -6,7 +6,7 @@
           Поле для ввода английского слова
         </v-layout>
         <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
-          <input v-model="eng" style="border: solid 1px #009688"  :rules="engRules">
+          <input v-model="eng" style="border: solid 1px #009688" :rules="engRules">
         </v-layout>
       </v-container>
       <v-container>
@@ -39,18 +39,20 @@
         eng: undefined,
         rus: undefined,
         engRules: [
-          (v) => !!v || 'Пожалуйста введите слово', // Если пустое поле
-          (v) => /^\w+([\.-]?\w+)+$/.test(v) || 'Неправильное английское слово' // Стандартный регуляр экспрешшн
+          v => !!v || "Пожалуйста введите слово", // Если пустое поле
+          v => /^\w+([\.-]?\w+)+$/.test(v) || "Неправильное английское слово" // Стандартный регуляр экспрешшн
         ],
         rusRules: [
-          (v) => !!v || 'Пожалуйста введите слово',
-          (v) => /[\wа-я]+/ig.test(v) || 'Неправильный перевод'
-        ],
+          v => !!v || "Пожалуйста введите слово",
+          v => /[\wа-я]+/gi.test(v) || "Неправильный перевод"
+        ]
       };
     },
     methods: {
       addwords() {
-  
+        this.$store.commit("ADD_WORDS", true);
+        this.$store.commit("DELETE_WORDS");
+        this.$store.dispatch("LOAD_SAVE_WORDS", this.$store.getters.userId);
       }
     }
   };

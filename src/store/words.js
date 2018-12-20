@@ -5,7 +5,6 @@ export default {
         words: [],
         maxId: null,
         isWordsAdd: false,
-
     },
     mutations: {
         SET_WORDS(state, payload) {
@@ -13,12 +12,14 @@ export default {
         },
         ADD_WORDS(state, payload) {
             state.isWordsAdd = payload
-        }
+        },
+        DELETE_WORDS(state) {
+            state.words.length = 0
+        },
     },
     actions: {
         LOAD_WORDS({ commit }) {
 
-            if(!this.isWordsAdd) {
             Vue.$db.collection('words')
                 .get()
                 .then(querySnapshot => {
@@ -38,11 +39,30 @@ export default {
                     commit('SET_WORDS', words)
 
                 })
-                .catch(error => console.log(error)) 
-            }
-            else{
-                console.log("addwords")
-            }
+                .catch(error => console.log(error))
+        },
+
+        LOAD_SAVE_WORDS({ commit, getters }, payload) {
+            Vue.$db.collection('words')
+                .get()
+                .then(querySnapshot => {
+                    let words = []
+                    querySnapshot.forEach(s => {
+                        const data = s.data()
+                        let word = {
+                            id: data.id,
+                            eng: data.eng,
+                            rus: data.rus
+                        }
+
+                        words.push(word)
+                        this.maxId = words.length
+
+                    })
+                    commit('SET_WORDS', words)
+
+                })
+                .catch(error => console.log(error))
         }
     },
     getters: {

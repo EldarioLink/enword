@@ -21,6 +21,7 @@ db.settings({
 });
 
 Vue.$db = db
+
 Vue.use(VuetifyConfirm, {
   buttonTrueText: 'Да',
   buttonFalseText: 'Нет',
@@ -37,7 +38,6 @@ new Vue({
     firebase.auth().onAuthStateChanged((user) => {  
       vm.$store.dispatch('STATE_CHANGED', user) 
     });
-    this.$store.dispatch('LOAD_WORDS')
   },
 
 }).$mount('#app')

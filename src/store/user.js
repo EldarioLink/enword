@@ -5,7 +5,7 @@ export default {
         user: {
             isAuthenticated: false,
             uid: null
-        }
+        },
     },
     mutations: {
         SET_USER(state, payload) {
@@ -45,10 +45,17 @@ export default {
                     commit('SET_ERROR', error.message)
                 })
         },
-        STATE_CHANGED({ commit, dispatch }, payload) {
+        STATE_CHANGED({ commit, dispatch, getters }, payload) {
             if (payload) {
-                commit('SET_USER', payload.uid) 
+                commit('SET_USER', payload.uid)
                 dispatch('LOAD_USER_DATA', payload.uid);
+
+                if (getters.getWordsAdd) {
+                 dispatch('LOAD_SAVE_WORDS', payload.uid)
+                }
+                else {
+                  dispatch('LOAD_WORDS')
+                }
 
             } else {
                 commit('UNSET_USER')
