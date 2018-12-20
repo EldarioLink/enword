@@ -6,7 +6,7 @@
           Поле для ввода английского слова
         </v-layout>
         <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
-          <input v-model="eng" style="border: solid 1px #009688" :rules="engRules">
+          <input v-model="obj.eng" style="border: solid 1px #009688" :rules="engRules">
         </v-layout>
       </v-container>
       <v-container>
@@ -14,7 +14,7 @@
           Поле для ввода перевода
         </v-layout>
         <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
-          <input v-model="rus" style="border: solid 1px #009688" :rules="rusRules">
+          <input v-model="obj.rus" style="border: solid 1px #009688" :rules="rusRules">
         </v-layout>
   
         <v-layout mt-4 align-center justify-center row>
@@ -33,36 +33,38 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return { 
-        eng: undefined,
-        rus: undefined,
-      idWord: this.$store.getters.getmaxId,
-      engRules: [
-        v => !!v || "Пожалуйста введите слово", // Если пустое поле
-        v => /^\w+([\.-]?\w+)+$/.test(v) || "Неправильное английское слово" // Стандартный регуляр экспрешшн
-      ],
-      rusRules: [
-        v => !!v || "Пожалуйста введите слово",
-        v => /[\wа-я]+/gi.test(v) || "Неправильный перевод"
-      ]
-    };
-  },
-  methods: {
-    addwords() {
-      //  поставил флажок, чтобы загружать новые слова
-      this.$store.commit("ADD_WORDS", true);
-      //  удалил старые слова
-      this.$store.commit("DELETE_WORDS");
-      console.log(this.idWord);
-      this.$store.dispatch("ADD_NEW_WORDS", this.$store.getters.userId);
-      //  загружаю новые слова
-      this.$store.dispatch("LOAD_SAVE_WORDS", this.$store.getters.userId);
+  export default {
+    data() {
+      return {
+        obj: {
+          eng: undefined,
+          rus: undefined,
+        },
+        engRules: [
+          v => !!v || "Пожалуйста введите слово", // Если пустое поле
+          v => /^\w+([\.-]?\w+)+$/.test(v) || "Неправильное английское слово" // Стандартный регуляр экспрешшн
+        ],
+        rusRules: [
+          v => !!v || "Пожалуйста введите слово",
+          v => /[\wа-я]+/gi.test(v) || "Неправильный перевод"
+        ]
+      };
+    },
+    methods: {
+      addwords() {
+        //  поставил флажок, чтобы загружать новые слова
+        this.$store.commit("ISADD_WORDS", true);
+        //  удалил старые слова
+        this.$store.commit("DELETE_WORDS");
+  
+        this.$store.dispatch("ADD_NEW_WORDS", this.obj);
+        //  загружаю новые слова
+        this.$store.dispatch("LOAD_SAVE_WORDS", this.$store.getters.userId);
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
+  
 </style>

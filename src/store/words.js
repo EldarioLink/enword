@@ -10,29 +10,34 @@ export default {
         SET_WORDS(state, payload) {
             state.words = payload
         },
-        ADD_WORDS(state, payload) {
+        ISADD_WORDS(state, payload) {
             state.isWordsAdd = payload
         },
         DELETE_WORDS(state) {
             state.words.length = 0
         },
+        ADD_WORDS(state, payload) {
+            state.words.eng = payload.eng,
+                state.words.rus = payload.rus,
+                state.words.eng = payload.eng
+        },
     },
     actions: {
-        ADD_NEW_WORDS({ commit },) { 
+        ADD_NEW_WORDS({ commit, getters }, payload) {
             commit('SET_PROCESSING', true)
-            let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords')
+            let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords').doc(getters.userId)
 
             let scoreAndDate = {
-                addedDate: new Date(),
-                maxScore: payload
+                eng: payload.eng,
+                rus: payload.rus,
+                id: this.maxId + 1
             }
 
             userDataRef.set({
                 scoreAndDate
-
             })
                 .then(() => {
-                    commit('ADD_USER_BOOK', payload)
+                    commit('ADD_WORDS', scoreAndDate)
                     commit('SET_PROCESSING', false)
                 })
                 .catch(() => {
