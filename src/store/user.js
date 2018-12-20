@@ -51,10 +51,10 @@ export default {
                 dispatch('LOAD_USER_DATA', payload.uid);
 
                 if (getters.getWordsAdd) {
-                 dispatch('LOAD_SAVE_WORDS', payload.uid)
+                    dispatch('LOAD_SAVE_WORDS')
                 }
                 else {
-                  dispatch('LOAD_WORDS')
+                    dispatch('LOAD_WORDS')
                 }
 
             } else {

@@ -42,8 +42,8 @@ export default {
                 .catch(error => console.log(error))
         },
 
-        LOAD_SAVE_WORDS({ commit, getters }, payload) {
-            Vue.$db.collection('words')
+        LOAD_SAVE_WORDS({ commit, getters }) {
+            Vue.$db.collection('userData').doc(getters.userId).collection('userWords')
                 .get()
                 .then(querySnapshot => {
                     let words = []
@@ -57,7 +57,7 @@ export default {
 
                         words.push(word)
                         this.maxId = words.length
-
+console.log(words)
                     })
                     commit('SET_WORDS', words)
 
