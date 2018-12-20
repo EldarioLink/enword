@@ -18,6 +18,27 @@ export default {
         },
     },
     actions: {
+        ADD_NEW_WORDS({ commit },) { 
+            commit('SET_PROCESSING', true)
+            let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords')
+
+            let scoreAndDate = {
+                addedDate: new Date(),
+                maxScore: payload
+            }
+
+            userDataRef.set({
+                scoreAndDate
+
+            })
+                .then(() => {
+                    commit('ADD_USER_BOOK', payload)
+                    commit('SET_PROCESSING', false)
+                })
+                .catch(() => {
+                    commit('SET_PROCESSING', false)
+                });
+        },
         LOAD_WORDS({ commit }) {
 
             Vue.$db.collection('words')
@@ -57,7 +78,6 @@ export default {
 
                         words.push(word)
                         this.maxId = words.length
-console.log(words)
                     })
                     commit('SET_WORDS', words)
 

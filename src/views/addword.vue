@@ -33,31 +33,36 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
+export default {
+  data() {
+    return { 
         eng: undefined,
         rus: undefined,
-        engRules: [
-          v => !!v || "Пожалуйста введите слово", // Если пустое поле
-          v => /^\w+([\.-]?\w+)+$/.test(v) || "Неправильное английское слово" // Стандартный регуляр экспрешшн
-        ],
-        rusRules: [
-          v => !!v || "Пожалуйста введите слово",
-          v => /[\wа-я]+/gi.test(v) || "Неправильный перевод"
-        ]
-      };
-    },
-    methods: {
-      addwords() {
-        this.$store.commit("ADD_WORDS", true);
-        this.$store.commit("DELETE_WORDS");
-        this.$store.dispatch("LOAD_SAVE_WORDS", this.$store.getters.userId);
-      }
+      idWord: this.$store.getters.getmaxId,
+      engRules: [
+        v => !!v || "Пожалуйста введите слово", // Если пустое поле
+        v => /^\w+([\.-]?\w+)+$/.test(v) || "Неправильное английское слово" // Стандартный регуляр экспрешшн
+      ],
+      rusRules: [
+        v => !!v || "Пожалуйста введите слово",
+        v => /[\wа-я]+/gi.test(v) || "Неправильный перевод"
+      ]
+    };
+  },
+  methods: {
+    addwords() {
+      //  поставил флажок, чтобы загружать новые слова
+      this.$store.commit("ADD_WORDS", true);
+      //  удалил старые слова
+      this.$store.commit("DELETE_WORDS");
+      console.log(this.idWord);
+      this.$store.dispatch("ADD_NEW_WORDS", this.$store.getters.userId);
+      //  загружаю новые слова
+      this.$store.dispatch("LOAD_SAVE_WORDS", this.$store.getters.userId);
     }
-  };
+  }
+};
 </script>
 
 <style scoped>
-  
 </style>
