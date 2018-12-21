@@ -58,11 +58,12 @@
     },
     methods: {
       submitans() {
+        console.log("subm" + this.$store.getters.getmaxId, );
         if (this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase())
           this.$store.commit("incrementCounter");
         this.showHelp = false;
         this.id =
-          Math.floor(Math.random() * (this.maxId - this.minId)) + this.minId;
+          Math.floor(Math.random() * (this.$store.getters.getmaxId - this.minId)) + this.minId;
         this.rusInput = "";
       },
       counterNull() {

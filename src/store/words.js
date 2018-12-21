@@ -17,35 +17,53 @@ export default {
         DELETE_WORDS(state) {
             this.maxId = state.words.length = 0
         },
-        ADD_WORD(state, payload) {
-            state.words.push(payload)
-            this.maxId = state.words.length
-            console.log(this.maxId)
-        },
+        // ADD_WORD(state, payload) {
+        //     state.words.length = 0
+
+        //     state.words.eng = payload.eng
+        //     state.words.rus = payload.rus
+        //     state.words.id = payload.id 
+
+        //     commit('maxId', state.words.length)
+        //     // state.words.push(payload)
+        //     // this.maxId = state.words.length
+        //     // console.log(this.maxId)
+        // },
+
         maxID(state, payload) {
             state.maxId = payload;
+            console.log("okok" + state.words.length, state.words)
+            console.log("max" + state.maxId)
         }
     },
     actions: {
-        ADD_NEW_WORDS({ commit, getters }, payload) {
+        ADD_NEW_WORDS({ commit, getters, dispatch }, payload) {
             commit('SET_PROCESSING', true)
             this.docId = "word" + this.maxId
             let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords').doc(this.docId)
 
 
-            let word = {
-                eng: payload.eng,
-                rus: payload.rus,
-                id: this.maxId
-            }
+            // let word = {
+            //     eng: payload.eng,
+            //     rus: payload.rus,
+            //     id: this.maxId
+            // }
 
             this.maxId += 1
 
             userDataRef.set({
-                word
+                eng: payload.eng,
+                rus: payload.rus,
+                id: this.maxId
             })
                 .then(() => {
-                    commit('ADD_WORD', word)
+                    // commit('ADD_WORD', {
+                    //     eng: payload.eng,
+                    //     rus: payload.rus,
+                    //     id: this.maxId
+                    // })
+                    dispatch('LOAD_SAVE_WORDS')
+
                     commit('SET_PROCESSING', false)
                 })
                 .catch(() => {
@@ -69,7 +87,7 @@ export default {
                         words.push(word)
                     })
                     commit('SET_WORDS', words)
-
+                    console.log("dlina" + words.length)
                     commit('maxID', words.length)
 
 
@@ -78,6 +96,7 @@ export default {
         },
 
         LOAD_SAVE_WORDS({ commit, getters }) {
+            commit('DELETE_WORDS')
             Vue.$db.collection('userData').doc(getters.userId).collection('userWords')
                 .get()
                 .then(querySnapshot => {
@@ -85,9 +104,9 @@ export default {
                     querySnapshot.forEach(s => {
                         const data = s.data()
                         let word = {
-                            id: data.word.id,
-                            eng: data.word.eng,
-                            rus: data.word.rus
+                            id: data.id,
+                            eng: data.eng,
+                            rus: data.rus
                         }
 
                         words.push(word)

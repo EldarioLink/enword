@@ -36,10 +36,7 @@
       },
       getCounterMax() {
         return this.$store.getters.getCounterMax;
-      },
-      getCounter() {
-        return this.$store.getters.getCounter;
-      }
+      }, 
     },
   
     mounted() {
@@ -48,7 +45,7 @@
         // Поставлен ли рекорд
         this.$store.commit("setmaxCounter");
         // Если рекорд, то сохраняем значение в firebase
-        if (this.getCounterMax < this.getCounter) {
+        if (this.getCounterMax < this.counterNow) {
           this.$store.dispatch(
             "ADD_USER_BOOK",
             this.$store.getters.getCounterMaxGame
