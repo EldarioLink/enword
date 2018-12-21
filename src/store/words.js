@@ -5,6 +5,7 @@ export default {
         words: [],
         maxId: null,
         isWordsAdd: false,
+        fireId: undefined
     },
     mutations: {
         SET_WORDS(state, payload) {
@@ -14,23 +15,29 @@ export default {
             state.isWordsAdd = payload
         },
         DELETE_WORDS(state) {
-            state.words.length = 0
+            this.maxId = state.words.length = 0 
         },
         ADD_WORDS(state, payload) {
-            state.words.eng = payload.eng,
+            console.log(payload.eng, payload.rus, payload.id)
+                state.words.eng = payload.eng,
                 state.words.rus = payload.rus,
-                state.words.eng = payload.eng
+                state.words.id = payload.id
         },
     },
     actions: {
         ADD_NEW_WORDS({ commit, getters }, payload) {
             commit('SET_PROCESSING', true)
-            let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords').doc(getters.userId)
+            this.fireId = "word" + this.maxId
+            console.log( this.fireId)
+            let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords').doc(this.fireId)
+            console.log(this.maxId)
+            this.maxId += 1
+            console.log(this.maxId)
 
             let scoreAndDate = {
                 eng: payload.eng,
                 rus: payload.rus,
-                id: this.maxId + 1
+                id: this.maxId
             }
 
             userDataRef.set({

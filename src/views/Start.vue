@@ -47,7 +47,7 @@
      data() {
        return {
          minId: 1,
-         maxId: 23,
+         maxId: undefined,
          rusInput: null,
          id: 3,
          seconds: 59,
@@ -95,6 +95,7 @@
      mounted() {
        this.$nextTick(() => {
          this.counterNull();
+         this.maxId = this.$store.getters.getmaxId;
        });
      },
      destroyed() {
@@ -106,7 +107,7 @@
        },
        counter() {
          return this.$store.getters.getCounter;
-       }
+       }, 
      }
    };
 </script>

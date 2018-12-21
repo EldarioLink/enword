@@ -36,6 +36,7 @@
   export default {
     data() {
       return {
+        deleteOldWords: false,
         obj: {
           eng: undefined,
           rus: undefined,
@@ -52,14 +53,17 @@
     },
     methods: {
       addwords() {
+        if (!this.deleteOldWords) {
+          this.deleteOldWords = !this.deleteOldWords
+          //  удалил старые слова
+          this.$store.commit("DELETE_WORDS");
+          console.log("danger")
+        }
         //  поставил флажок, чтобы загружать новые слова
         this.$store.commit("ISADD_WORDS", true);
-        //  удалил старые слова
-        this.$store.commit("DELETE_WORDS");
   
-        this.$store.dispatch("ADD_NEW_WORDS", this.obj);
-        //  загружаю новые слова
-        this.$store.dispatch("LOAD_SAVE_WORDS", this.$store.getters.userId);
+  
+        this.$store.dispatch("ADD_NEW_WORDS", this.obj); 
       }
     }
   };
