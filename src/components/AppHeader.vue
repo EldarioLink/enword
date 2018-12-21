@@ -38,57 +38,62 @@
   export default {
     data() {
       return {
-        drawer: false,
-        counter: null
+        drawer: false, // Меню мобильной версий
+        counter: null // Текущий счёт
       };
     },
     computed: {
+       // Проверка зарегистрирован ли пользователь
       isUserAuthenticated() {
         return this.$store.getters.isUserAuthenticated;
       },
+      // Какие кнопки показывать пользователю
       menuItems() {
-        return this.isUserAuthenticated ? [{
-            icon: "reply",
-            title: "Начать",
-            route: "/start"
-          },
-          {
-            icon: "trending_up",
-            title: "Ваш рекорд",
-            route: "/score"
-          }
-        ] : [{
-            icon: "reply",
-            title: "Начать",
-            route: "/start"
-          },
-          {
-            icon: "trending_up",
-            title: "Ваш рекорд",
-            route: "/score"
-          },
-          {
-            icon: "input",
-            title: "Войти",
-            route: "/signin"
-          },
-          {
-            icon: "lock_open",
-            title: "Зарегистрироваться",
-            route: "/signup"
-          },
-        ];
+        return this.isUserAuthenticated ?
+          [{
+              icon: "reply",
+              title: "Начать",
+              route: "/start"
+            },
+            {
+              icon: "trending_up",
+              title: "Ваш рекорд",
+              route: "/score"
+            }
+          ] :
+          [{
+              icon: "reply",
+              title: "Начать",
+              route: "/start"
+            },
+            {
+              icon: "trending_up",
+              title: "Ваш рекорд",
+              route: "/score"
+            },
+            {
+              icon: "input",
+              title: "Войти",
+              route: "/signin"
+            },
+            {
+              icon: "lock_open",
+              title: "Зарегистрироваться",
+              route: "/signup"
+            }
+          ];
       }
     },
     methods: {
+      // Диалоговое окно при нажатий на кнопку "Выйти"
       signout() {
         this.$confirm("Вы действительно хотите выйти?").then(res => {
           if (res) {
             this.$store.dispatch("SIGNOUT");
             this.$router.push("/signin");
-          } 
+          }
         });
-      }, 
+      }
     }
   };
 </script>

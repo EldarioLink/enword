@@ -17,34 +17,37 @@ export default {
                 isAuthenticated: false,
                 uid: null
             }
-        }, 
+        },
     },
     actions: {
+        // Регистрация пользователя
         SIGNUP({ commit }, payload) {
             commit('SET_PROCESSING', true)
             commit('CLEAR_ERROR')
             firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                 .then(() => {
-
-                    commit('SET_PROCESSING', false)  // при успехе кнопка disabled
+                    commit('SET_PROCESSING', false)
                 })
                 .catch(function (error) {
-                    commit('SET_PROCESSING', false)     // при ошибке кнопка disabled
-                    commit('SET_ERROR', error.message)     // при ошибке кнопка disabled  
+                    commit('SET_PROCESSING', false)
+                    commit('SET_ERROR', error.message)
                 });
         },
+        // Вход пользователя
         SIGNIN({ commit }, payload) {
             commit('SET_PROCESSING', true)
             commit('CLEAR_ERROR')
             firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
                 .then(() => {
-                    commit('SET_PROCESSING', false)  // при успехе кнопка disabled
+                    commit('SET_PROCESSING', false)
                 })
                 .catch(function (error) {
-                    commit('SET_PROCESSING', false)     // при ошибке кнопка disabled
+                    commit('SET_PROCESSING', false)
                     commit('SET_ERROR', error.message)
                 })
         },
+
+        // Аутентифицирован ли пользователь ?!
         STATE_CHANGED({ commit, dispatch, getters }, payload) {
             if (payload) {
                 commit('SET_USER', payload.uid)

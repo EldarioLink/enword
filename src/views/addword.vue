@@ -35,7 +35,7 @@
 <script>
   export default {
     data() {
-      return { 
+      return {
         obj: {
           eng: undefined,
           rus: undefined,
@@ -52,16 +52,17 @@
     },
     methods: {
       addwords() {
-        if (!this.$store.getters.getWordsAdd) { 
+        // Если идет первое добавление новых слов
+        if (!this.$store.getters.getWordsAdd) {
+  
           //  удалил старые слова
           this.$store.commit("DELETE_WORDS");
-          console.log("danger")
-          //  поставил флажок, чтобы загружать новые слова
+  
+          //  поставил флажок, что загружаю новые слова
           this.$store.commit("ISADD_WORDS", true);
         }
   
-  
-  
+        //  Передаем объект с новыми словами
         this.$store.dispatch("ADD_NEW_WORDS", this.obj);
       }
     }

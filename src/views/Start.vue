@@ -49,7 +49,7 @@
         minId: 1,
         maxId: undefined,
         rusInput: null,
-        id: 3,
+        id: 1,
         seconds: 59,
         setInt: true,
         showHelp: false,
@@ -60,12 +60,9 @@
       submitans() {
         if (this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase())
           this.$store.commit("incrementCounter");
-  
         this.showHelp = false;
-  
         this.id =
           Math.floor(Math.random() * (this.maxId - this.minId)) + this.minId;
-  
         this.rusInput = "";
       },
       counterNull() {
@@ -93,22 +90,30 @@
       }
     },
     mounted() {
-      this.$nextTick(() => {
-        this.counterNull();
-        this.maxId = this.$store.getters.getmaxId;
-        console.log("start"+this.maxId,this.$store.getters.getmaxId)
-      });
+      if (this.$store.getters.getWordsAdd) {
+        this.$store.dispatch('LOAD_SAVE_WORDS')
+        console.log("save")
+      } else {
+        this.$store.dispatch('LOAD_WORDS')
+        console.log("common")
+      }
+  
+      this.counterNull();
+  
+      this.maxId = this.$store.getters.getmaxId;
+  
+      console.log("start" + this.maxId, this.$store.getters.getmaxId);
     },
     destroyed() {
       clearInterval(this.timeinterval);
     },
     computed: {
-      words() { 
+      words() {
         return this.$store.getters.getWords.find(b => b.id == this.id);
       },
       counter() {
         return this.$store.getters.getCounter;
-      },
+      }
     }
   };
 </script>

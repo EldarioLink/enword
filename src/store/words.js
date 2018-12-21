@@ -14,30 +14,38 @@ export default {
         ISADD_WORDS(state, payload) {
             state.isWordsAdd = payload
         },
-        DELETE_WORDS(state) { 
-            this.maxId = state.words.length = 0 
-        }, 
+        DELETE_WORDS(state) {
+            this.maxId = state.words.length = 0
+        },
+        ADD_WORD(state, payload) {
+            state.words.push(payload)
+            this.maxId = state.words.length
+            console.log(this.maxId)
+        },
+        maxID(state, payload) {
+            state.maxId = payload;
+        }
     },
     actions: {
         ADD_NEW_WORDS({ commit, getters }, payload) {
             commit('SET_PROCESSING', true)
             this.docId = "word" + this.maxId
-            console.log(this.docId)
             let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords').doc(this.docId)
-            console.log(this.maxId)
 
-            let words = {
+
+            let word = {
                 eng: payload.eng,
                 rus: payload.rus,
                 id: this.maxId
             }
-            words.push(words)
+
             this.maxId += 1
 
             userDataRef.set({
-                scoreAndDate
+                word
             })
-                .then(() => { 
+                .then(() => {
+                    commit('ADD_WORD', word)
                     commit('SET_PROCESSING', false)
                 })
                 .catch(() => {
@@ -59,10 +67,11 @@ export default {
                         }
 
                         words.push(word)
-                        this.maxId = words.length
-
                     })
                     commit('SET_WORDS', words)
+
+                    commit('maxID', words.length)
+
 
                 })
                 .catch(error => console.log(error))
@@ -76,15 +85,16 @@ export default {
                     querySnapshot.forEach(s => {
                         const data = s.data()
                         let word = {
-                            id: data.id,
-                            eng: data.eng,
-                            rus: data.rus
+                            id: data.word.id,
+                            eng: data.word.eng,
+                            rus: data.word.rus
                         }
 
                         words.push(word)
-                        this.maxId = words.length
                     })
                     commit('SET_WORDS', words)
+
+                    commit('maxID', words.length)
 
                 })
                 .catch(error => console.log(error))
@@ -93,7 +103,7 @@ export default {
     getters: {
         getWords: (state) => state.words,
         getmaxId: (state) => state.maxId,
-        getWordsAdd: (state) => state.isWordsAdd
+        getWordsAdd: (state) => state.isWordsAdd,
     },
 
 }
