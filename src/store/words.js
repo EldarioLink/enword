@@ -16,13 +16,7 @@ export default {
         },
         DELETE_WORDS(state) { 
             this.maxId = state.words.length = 0 
-        },
-        ADD_WORDS(state, payload) {
-            console.log(payload.eng, payload.rus, payload.id)
-            state.words.eng = payload.eng,
-                state.words.rus = payload.rus,
-                state.words.id = payload.id
-        },
+        }, 
     },
     actions: {
         ADD_NEW_WORDS({ commit, getters }, payload) {
@@ -32,19 +26,18 @@ export default {
             let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords').doc(this.docId)
             console.log(this.maxId)
 
-            let scoreAndDate = {
+            let words = {
                 eng: payload.eng,
                 rus: payload.rus,
                 id: this.maxId
             }
-
+            words.push(words)
             this.maxId += 1
 
             userDataRef.set({
                 scoreAndDate
             })
-                .then(() => {
-                    commit('ADD_WORDS', scoreAndDate)
+                .then(() => { 
                     commit('SET_PROCESSING', false)
                 })
                 .catch(() => {

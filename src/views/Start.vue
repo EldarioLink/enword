@@ -103,7 +103,7 @@
       clearInterval(this.timeinterval);
     },
     computed: {
-      words() {
+      words() { 
         return this.$store.getters.getWords.find(b => b.id == this.id);
       },
       counter() {
