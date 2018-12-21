@@ -3,9 +3,9 @@ import Vue from 'vue'
 export default {
     state: {
         words: [],
-        maxId: null,
+        maxId: undefined,
         isWordsAdd: false,
-        fireId: undefined
+        docId: undefined
     },
     mutations: {
         SET_WORDS(state, payload) {
@@ -14,12 +14,12 @@ export default {
         ISADD_WORDS(state, payload) {
             state.isWordsAdd = payload
         },
-        DELETE_WORDS(state) {
+        DELETE_WORDS(state) { 
             this.maxId = state.words.length = 0 
         },
         ADD_WORDS(state, payload) {
             console.log(payload.eng, payload.rus, payload.id)
-                state.words.eng = payload.eng,
+            state.words.eng = payload.eng,
                 state.words.rus = payload.rus,
                 state.words.id = payload.id
         },
@@ -27,11 +27,9 @@ export default {
     actions: {
         ADD_NEW_WORDS({ commit, getters }, payload) {
             commit('SET_PROCESSING', true)
-            this.fireId = "word" + this.maxId
-            console.log( this.fireId)
-            let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords').doc(this.fireId)
-            console.log(this.maxId)
-            this.maxId += 1
+            this.docId = "word" + this.maxId
+            console.log(this.docId)
+            let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords').doc(this.docId)
             console.log(this.maxId)
 
             let scoreAndDate = {
@@ -39,6 +37,8 @@ export default {
                 rus: payload.rus,
                 id: this.maxId
             }
+
+            this.maxId += 1
 
             userDataRef.set({
                 scoreAndDate

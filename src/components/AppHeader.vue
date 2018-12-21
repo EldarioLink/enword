@@ -47,52 +47,48 @@
         return this.$store.getters.isUserAuthenticated;
       },
       menuItems() {
-        return this.isUserAuthenticated ?
-          [{
-              icon: "reply",
-              title: "Начать",
-              route: "/start"
-            },
-            {
-              icon: "trending_up",
-              title: "Ваш рекорд",
-              route: "/score"
-            }
-          ] :
-          [{
-              icon: "reply",
-              title: "Начать",
-              route: "/start"
-            },
-            {
-              icon: "trending_up",
-              title: "Ваш рекорд",
-              route: "/score"
-            },
-            {
-              icon: "input",
-              title: "Войти",
-              route: "/signin"
-            },
-            {
-              icon: "lock_open",
-              title: "Зарегистрироваться",
-              route: "/signup"
-            },
-          ];
+        return this.isUserAuthenticated ? [{
+            icon: "reply",
+            title: "Начать",
+            route: "/start"
+          },
+          {
+            icon: "trending_up",
+            title: "Ваш рекорд",
+            route: "/score"
+          }
+        ] : [{
+            icon: "reply",
+            title: "Начать",
+            route: "/start"
+          },
+          {
+            icon: "trending_up",
+            title: "Ваш рекорд",
+            route: "/score"
+          },
+          {
+            icon: "input",
+            title: "Войти",
+            route: "/signin"
+          },
+          {
+            icon: "lock_open",
+            title: "Зарегистрироваться",
+            route: "/signup"
+          },
+        ];
       }
     },
     methods: {
       signout() {
         this.$confirm("Вы действительно хотите выйти?").then(res => {
-          if (res)
+          if (res) {
             this.$store.dispatch("SIGNOUT");
-          this.$router.push("/signin");
+            this.$router.push("/signin");
+          } 
         });
-      },
-      coun(id) {
-        this.counter = id;
-      }
+      }, 
     }
   };
 </script>

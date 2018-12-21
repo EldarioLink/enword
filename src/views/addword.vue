@@ -35,8 +35,7 @@
 <script>
   export default {
     data() {
-      return {
-        deleteOldWords: false,
+      return { 
         obj: {
           eng: undefined,
           rus: undefined,
@@ -53,17 +52,17 @@
     },
     methods: {
       addwords() {
-        if (!this.deleteOldWords) {
-          this.deleteOldWords = !this.deleteOldWords
+        if (!this.$store.getters.getWordsAdd) { 
           //  удалил старые слова
           this.$store.commit("DELETE_WORDS");
           console.log("danger")
+          //  поставил флажок, чтобы загружать новые слова
+          this.$store.commit("ISADD_WORDS", true);
         }
-        //  поставил флажок, чтобы загружать новые слова
-        this.$store.commit("ISADD_WORDS", true);
   
   
-        this.$store.dispatch("ADD_NEW_WORDS", this.obj); 
+  
+        this.$store.dispatch("ADD_NEW_WORDS", this.obj);
       }
     }
   };

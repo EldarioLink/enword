@@ -17,7 +17,7 @@ export default {
                 isAuthenticated: false,
                 uid: null
             }
-        }
+        }, 
     },
     actions: {
         SIGNUP({ commit }, payload) {
