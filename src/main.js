@@ -35,9 +35,7 @@ new Vue({
   render: h => h(App),
   created() {
     let vm = this
-
     // наблюдатель который вызывается при изменений состояния входа пользователя
-
     firebase.auth().onAuthStateChanged((user) => {
       vm.$store.dispatch('STATE_CHANGED', user)
     });

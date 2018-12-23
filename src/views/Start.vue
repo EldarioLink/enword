@@ -3,7 +3,7 @@
     <v-content>
       <v-container>
         <v-layout style="color:#009688;font-size:20px" align-center justify-end row fill-height>
-  
+
           TIME: {{ this.seconds }}
         </v-layout>
         <v-layout style="color:#009688;font-size:20px" align-center justify-end row fill-height>
@@ -19,11 +19,11 @@
         </v-layout>
         <v-container>
           <v-layout align-center justify-center row fill-height>
-  
+
             <input @keyup.enter="submitans" placeholder="Введите перевод" @input="startTimer()" v-model="rusInput" style="border: solid 1px #009688">
-  
+
           </v-layout>
-  
+
         </v-container>
       </v-container>
       <v-container>
@@ -38,7 +38,7 @@
         </v-btn>
       </v-layout>
     </v-content>
-  
+
   </v-app>
 </template>
 
@@ -58,7 +58,6 @@
     },
     methods: {
       submitans() {
-        console.log("subm" + this.$store.getters.getmaxId, );
         if (this.rusInput.toLowerCase().trim() === this.words.rus.toLowerCase())
           this.$store.commit("incrementCounter");
         this.showHelp = false;
@@ -98,12 +97,10 @@
         this.$store.dispatch('LOAD_WORDS')
         console.log("common")
       }
-  
+
       this.counterNull();
-  
+
       this.maxId = this.$store.getters.getmaxId;
-  
-      console.log("start" + this.maxId, this.$store.getters.getmaxId);
     },
     destroyed() {
       clearInterval(this.timeinterval);
@@ -120,5 +117,5 @@
 </script>
 
 <style scoped>
-  
+
 </style>

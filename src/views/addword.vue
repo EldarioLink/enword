@@ -16,7 +16,7 @@
         <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
           <input v-model="obj.rus" style="border: solid 1px #009688" :rules="rusRules">
         </v-layout>
-  
+
         <v-layout mt-4 align-center justify-center row>
           <v-btn @click="addwords()" color="success">Добавить</v-btn>
         </v-layout>
@@ -26,9 +26,9 @@
           Если вы добавите слова, то список будет содержать только их.
         </v-alert>
       </v-container>
-  
+
     </v-content>
-  
+
   </v-app>
 </template>
 
@@ -54,14 +54,15 @@
       addwords() {
         // Если идет первое добавление новых слов
         if (!this.$store.getters.getWordsAdd) {
-  
+          console.log("DELETEALL ARRAY")
           //  удалил старые слова
           this.$store.commit("DELETE_WORDS");
-  
+          this.$store.commit("MAXID_NULL")
+
           //  поставил флажок, что загружаю новые слова
-          this.$store.commit("ISADD_WORDS", true);
+          this.$store.commit("isWordsAdd", true);
         }
-  
+
         //  Передаем объект с новыми словами
         this.$store.dispatch("ADD_NEW_WORDS", this.obj);
       }
@@ -70,5 +71,5 @@
 </script>
 
 <style scoped>
-  
+
 </style>

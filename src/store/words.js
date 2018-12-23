@@ -3,7 +3,7 @@ import Vue from 'vue'
 export default {
     state: {
         words: [],
-        maxId: undefined,
+        maxId: 0,
         isWordsAdd: false,
         docId: undefined
     },
@@ -11,52 +11,40 @@ export default {
         SET_WORDS(state, payload) {
             state.words = payload
         },
-        ISADD_WORDS(state, payload) {
+        INCREMENT_MAXID(state, payload) {
+            state.maxId += payload
+        },
+        isWordsAdd(state, payload) {
             state.isWordsAdd = payload
         },
         DELETE_WORDS(state) {
-            this.maxId = state.words.length = 0
+            state.words.length = 0
         },
-        // ADD_WORD(state, payload) {
-        //     state.words.length = 0
-
-        //     state.words.eng = payload.eng
-        //     state.words.rus = payload.rus
-        //     state.words.id = payload.id 
-
-        //     commit('maxId', state.words.length)
-        //     // state.words.push(payload)
-        //     // this.maxId = state.words.length
-        //     // console.log(this.maxId)
-        // },
-
         maxID(state, payload) {
             state.maxId = payload;
-            console.log("okok" + state.words.length, state.words)
-            console.log("max" + state.maxId)
+        },
+        MAXID_NULL(state) {
+            state.maxId = 0;
         }
+
     },
     actions: {
         ADD_NEW_WORDS({ commit, getters, dispatch }, payload) {
+            console.log("start maxId is, must be first 0" + getters.getmaxId)
             commit('SET_PROCESSING', true)
-            this.docId = "word" + this.maxId
+
+            this.docId = "word" + getters.getmaxId
+            console.log("toto" + this.maxId, this.docId)
             let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords').doc(this.docId)
 
-
-            // let word = {
-            //     eng: payload.eng,
-            //     rus: payload.rus,
-            //     id: this.maxId
-            // }
-
-            this.maxId += 1
 
             userDataRef.set({
                 eng: payload.eng,
                 rus: payload.rus,
-                id: this.maxId
+                id: getters.getmaxId
             })
                 .then(() => {
+
                     // commit('ADD_WORD', {
                     //     eng: payload.eng,
                     //     rus: payload.rus,
@@ -87,6 +75,7 @@ export default {
                         words.push(word)
                     })
                     commit('SET_WORDS', words)
+
                     console.log("dlina" + words.length)
                     commit('maxID', words.length)
 
@@ -110,10 +99,13 @@ export default {
                         }
 
                         words.push(word)
-                    })
-                    commit('SET_WORDS', words)
 
+                    })
+
+                    commit('SET_WORDS', words)
                     commit('maxID', words.length)
+
+                    console.log("start maxId is, must be first 1" + words.length, getters.getmaxId)
 
                 })
                 .catch(error => console.log(error))
