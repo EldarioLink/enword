@@ -48,21 +48,16 @@ export default {
         },
 
         // Аутентифицирован ли пользователь ?!
-        STATE_CHANGED({ commit, dispatch, getters }, payload) {
-            if (payload) {
-                commit('SET_USER', payload.uid)
-                dispatch('LOAD_USER_DATA', payload.uid);
-
-                if (getters.getWordsAdd) {
-                    dispatch('LOAD_SAVE_WORDS')
+        STATE_CHANGED( state, payload) {
+            return new Promise((resolve) => {
+                if (payload) {
+                    state.commit('SET_USER', payload.uid);
+                    state.dispatch('LOAD_USER_DATA', payload.uid);
+                    resolve();
+                } else {
+                    state.commit('UNSET_USER')
                 }
-                else {
-                    dispatch('LOAD_WORDS')
-                }
-
-            } else {
-                commit('UNSET_USER')
-            }
+            })
         },
         SIGNOUT() {
             firebase.auth().signOut()

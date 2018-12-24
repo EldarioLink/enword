@@ -1,7 +1,4 @@
 import Vue from 'vue'
-import {
-    resolve
-} from 'path';
 
 export default {
     state: {
@@ -108,6 +105,7 @@ export default {
                 .catch(error => console.log(error))
         },
         LENGTH_DATA_WORDS(state) {
+            console.log("it was"+state.getters.userId)
             return new Promise((resolve) => {
                 let userDataRef = Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
                 userDataRef.get()

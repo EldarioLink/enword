@@ -2,34 +2,24 @@
   <v-app id="inspire">
     <v-content>
       <v-container>
-        <v-layout style="color:#009688;font-size:20px" align-center justify-end row fill-height>
-
-          TIME: {{ this.seconds }}
-        </v-layout>
-        <v-layout style="color:#009688;font-size:20px" align-center justify-end row fill-height>
-          COUNTER: {{counter}}
-        </v-layout>
+        <v-layout style="color:#009688;font-size:20px" align-center justify-end row fill-height>TIME: {{ this.seconds }}</v-layout>
+        <v-layout style="color:#009688;font-size:20px" align-center justify-end row fill-height>COUNTER: {{counter}}</v-layout>
       </v-container>
       <v-container>
-        <v-layout v-if="words" style="color:#009688;font-size:20px" align-center justify-center row fill-height>
-          {{ words.eng }}
-        </v-layout>
+        <v-layout v-if="words" style="color:#009688;font-size:20px" align-center justify-center row fill-height>{{ words.eng }}</v-layout>
         <v-layout v-else align-center justify-center row fill-height>
           <v-icon>restore</v-icon>
         </v-layout>
         <v-container>
           <v-layout align-center justify-center row fill-height>
-
             <input @keyup.enter="submitans" placeholder="Введите перевод" @input="startTimer()" v-model="rusInput" style="border: solid 1px #009688">
-
           </v-layout>
-
         </v-container>
       </v-container>
       <v-container>
         <v-layout align-center justify-center row fill-height>
           <v-icon @click.prevent="getHelp()" size="18">help</v-icon>
-          <span class="success--text" v-if="this.showHelp" style="font-weight: bold"> {{words.rus}} </span>
+          <span class="success--text" v-if="this.showHelp" style="font-weight: bold">{{words.rus}}</span>
         </v-layout>
       </v-container>
       <v-layout justify-end>
@@ -38,7 +28,6 @@
         </v-btn>
       </v-layout>
     </v-content>
-
   </v-app>
 </template>
 
@@ -62,7 +51,9 @@
           this.$store.commit("incrementCounter");
         this.showHelp = false;
         this.id =
-          Math.floor(Math.random() * (this.$store.getters.getmaxId - this.minId)) + this.minId;
+          Math.floor(
+            Math.random() * (this.$store.getters.getmaxId - this.minId)
+          ) + this.minId;
         this.rusInput = "";
       },
       counterNull() {
@@ -90,17 +81,12 @@
       }
     },
     mounted() {
-      if (this.$store.getters.getWordsAdd) {
-        this.$store.dispatch('LOAD_SAVE_WORDS')
-        console.log("save")
-      } else {
-        this.$store.dispatch('LOAD_WORDS')
-        console.log("common")
-      }
       this.counterNull();
 
       this.maxId = this.$store.getters.getmaxId;
-      console.log("length" + this.$store.getters.getmaxId)
+      console.log("length" + this.$store.getters.getmaxId);
+
+
     },
     destroyed() {
       clearInterval(this.timeinterval);
