@@ -51,10 +51,7 @@ export default {
                     state.commit('SET_PROCESSING', false)
                 });
         },
-        LOAD_WORDS({
-            commit
-        }) {
-
+        LOAD_WORDS(state) {
             Vue.$db.collection('words')
                 .get()
                 .then(querySnapshot => {
@@ -69,10 +66,9 @@ export default {
 
                         words.push(word)
                     })
-                    commit('SET_WORDS', words)
+                    state.commit('SET_WORDS', words)
 
-                    console.log("dlina" + words.length)
-                    commit('maxID', words.length)
+                    state.commit('maxID', words.length)
 
 
                 })
@@ -99,13 +95,10 @@ export default {
                     state.commit('SET_WORDS', words)
                     state.commit('maxID', words.length)
 
-                    console.log("start maxId is, must be first 1" + words.length, state.getters.getmaxId)
-
                 })
                 .catch(error => console.log(error))
         },
         LENGTH_DATA_WORDS(state) {
-            console.log("it was"+state.getters.userId)
             return new Promise((resolve) => {
                 let userDataRef = Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
                 userDataRef.get()
@@ -113,8 +106,16 @@ export default {
                         return resolve(data.docs.length)
                     })
             })
+        },
+        DELETE_DATA_WORDS(state) {
+            return new Promise((resolve) => {
+                Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords').docs().delete()
+                    .then(() => {
+                       resolve();
+                    })
 
 
+            })
         }
     },
     getters: {

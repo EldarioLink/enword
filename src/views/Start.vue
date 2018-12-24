@@ -84,9 +84,6 @@
       this.counterNull();
 
       this.maxId = this.$store.getters.getmaxId;
-      console.log("length" + this.$store.getters.getmaxId);
-
-
     },
     destroyed() {
       clearInterval(this.timeinterval);
