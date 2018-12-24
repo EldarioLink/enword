@@ -56,15 +56,18 @@
         if (!this.$store.getters.getWordsAdd) {
           console.log("DELETEALL ARRAY")
           //  удалил старые слова
-          this.$store.commit("DELETE_WORDS");
-          this.$store.commit("MAXID_NULL")
-
+          // this.$store.commit("DELETE_WORDS");
+          // this.$store.commit("MAXID_NULL")
+          this.$store.dispatch("LOAD_SAVE_WORDS").then(() => {
+            this.$store.dispatch("ADD_NEW_WORDS", this.obj);
+          })
           //  поставил флажок, что загружаю новые слова
           this.$store.commit("isWordsAdd", true);
+        } else {
+          //  Передаем объект с новыми словами
+          this.$store.dispatch("ADD_NEW_WORDS", this.obj);
         }
 
-        //  Передаем объект с новыми словами
-        this.$store.dispatch("ADD_NEW_WORDS", this.obj);
       }
     }
   };

@@ -29,20 +29,24 @@ export default {
 
     },
     actions: {
-        ADD_NEW_WORDS({ commit, getters, dispatch }, payload) {
+        ADD_NEW_WORDS({
+            commit,
+            getters,
+            dispatch
+        }, payload) {
+            console.log("i am second")
             console.log("start maxId is, must be first 0" + getters.getmaxId)
             commit('SET_PROCESSING', true)
 
             this.docId = "word" + getters.getmaxId
-            console.log("toto" + this.maxId, this.docId)
             let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords').doc(this.docId)
 
 
             userDataRef.set({
-                eng: payload.eng,
-                rus: payload.rus,
-                id: getters.getmaxId
-            })
+                    eng: payload.eng,
+                    rus: payload.rus,
+                    id: getters.getmaxId
+                })
                 .then(() => {
 
                     // commit('ADD_WORD', {
@@ -58,7 +62,9 @@ export default {
                     commit('SET_PROCESSING', false)
                 });
         },
-        LOAD_WORDS({ commit }) {
+        LOAD_WORDS({
+            commit
+        }) {
 
             Vue.$db.collection('words')
                 .get()
@@ -84,7 +90,10 @@ export default {
                 .catch(error => console.log(error))
         },
 
-        LOAD_SAVE_WORDS({ commit, getters }) {
+        LOAD_SAVE_WORDS({
+            commit,
+            getters
+        }) {
             commit('DELETE_WORDS')
             Vue.$db.collection('userData').doc(getters.userId).collection('userWords')
                 .get()
@@ -101,7 +110,6 @@ export default {
                         words.push(word)
 
                     })
-
                     commit('SET_WORDS', words)
                     commit('maxID', words.length)
 
@@ -109,6 +117,20 @@ export default {
 
                 })
                 .catch(error => console.log(error))
+        },
+        IS_EXIST_WORDS({
+            getters
+        }) {
+            Vue.$db.collection('userData').doc(getters.userId).collection('userWords')
+                .get()
+                .then((data) => {
+                   if(data.exist) {
+                    console.log("exist" + data.length)
+                   }
+                   else{
+                       console.log("no exist")
+                   }
+                })
         }
     },
     getters: {
