@@ -1,4 +1,7 @@
 import Vue from 'vue'
+import {
+    resolve
+} from 'path';
 
 export default {
     state: {
@@ -29,37 +32,26 @@ export default {
 
     },
     actions: {
-        ADD_NEW_WORDS({
-            commit,
-            getters,
-            dispatch
-        }, payload) {
-            console.log("i am second")
-            console.log("start maxId is, must be first 0" + getters.getmaxId)
-            commit('SET_PROCESSING', true)
+        ADD_NEW_WORDS(state, payload) {
+            state.commit('maxID', payload.length)
+            state.commit('INCREMENT_MAXID', 1)
+            state.commit('SET_PROCESSING', true)
+            this.docId = "word" + state.getters.getmaxId
+            let userDataRef = Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords').doc(this.docId)
 
-            this.docId = "word" + getters.getmaxId
-            let userDataRef = Vue.$db.collection('userData').doc(getters.userId).collection('userWords').doc(this.docId)
+            let word = {
+                eng: payload.eng,
+                rus: payload.rus,
+                id: state.getters.getmaxId
+            }
 
-
-            userDataRef.set({
-                    eng: payload.eng,
-                    rus: payload.rus,
-                    id: getters.getmaxId
-                })
+            userDataRef.set(word)
                 .then(() => {
-
-                    // commit('ADD_WORD', {
-                    //     eng: payload.eng,
-                    //     rus: payload.rus,
-                    //     id: this.maxId
-                    // })
-                    dispatch('LOAD_SAVE_WORDS')
-
-                    commit('SET_PROCESSING', false)
+                    state.dispatch('LOAD_SAVE_WORDS')
+                    state.commit('SET_PROCESSING', false)
                 })
                 .catch(() => {
-                    commit('SET_PROCESSING', false)
+                    state.commit('SET_PROCESSING', false)
                 });
         },
         LOAD_WORDS({
@@ -90,12 +82,9 @@ export default {
                 .catch(error => console.log(error))
         },
 
-        LOAD_SAVE_WORDS({
-            commit,
-            getters
-        }) {
-            commit('DELETE_WORDS')
-            Vue.$db.collection('userData').doc(getters.userId).collection('userWords')
+        LOAD_SAVE_WORDS(state) {
+            state.commit('DELETE_WORDS')
+            Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
                 .get()
                 .then(querySnapshot => {
                     let words = []
@@ -110,27 +99,24 @@ export default {
                         words.push(word)
 
                     })
-                    commit('SET_WORDS', words)
-                    commit('maxID', words.length)
+                    state.commit('SET_WORDS', words)
+                    state.commit('maxID', words.length)
 
-                    console.log("start maxId is, must be first 1" + words.length, getters.getmaxId)
+                    console.log("start maxId is, must be first 1" + words.length, state.getters.getmaxId)
 
                 })
                 .catch(error => console.log(error))
         },
-        IS_EXIST_WORDS({
-            getters
-        }) {
-            Vue.$db.collection('userData').doc(getters.userId).collection('userWords')
-                .get()
-                .then((data) => {
-                   if(data.exist) {
-                    console.log("exist" + data.length)
-                   }
-                   else{
-                       console.log("no exist")
-                   }
-                })
+        LENGTH_DATA_WORDS(state) {
+            return new Promise((resolve) => {
+                let userDataRef = Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
+                userDataRef.get()
+                    .then((data) => {
+                        return resolve(data.docs.length)
+                    })
+            })
+
+
         }
     },
     getters: {

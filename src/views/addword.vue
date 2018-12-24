@@ -6,7 +6,7 @@
           Поле для ввода английского слова
         </v-layout>
         <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
-          <input v-model="obj.eng" style="border: solid 1px #009688" :rules="engRules">
+          <input v-model="eng" style="border: solid 1px #009688" :rules="engRules">
         </v-layout>
       </v-container>
       <v-container>
@@ -14,11 +14,11 @@
           Поле для ввода перевода
         </v-layout>
         <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
-          <input v-model="obj.rus" style="border: solid 1px #009688" :rules="rusRules">
+          <input v-model="rus" style="border: solid 1px #009688" :rules="rusRules">
         </v-layout>
 
         <v-layout mt-4 align-center justify-center row>
-          <v-btn @click="addwords()" color="success">Добавить</v-btn>
+          <v-btn @click="addwords()" v-if="activeBtn" color="success">Добавить</v-btn>
         </v-layout>
       </v-container>
       <v-container>
@@ -36,10 +36,9 @@
   export default {
     data() {
       return {
-        obj: {
-          eng: undefined,
-          rus: undefined,
-        },
+
+        eng: undefined,
+        rus: undefined,
         engRules: [
           v => !!v || "Пожалуйста введите слово", // Если пустое поле
           v => /^\w+([\.-]?\w+)+$/.test(v) || "Неправильное английское слово" // Стандартный регуляр экспрешшн
@@ -52,22 +51,39 @@
     },
     methods: {
       addwords() {
-        // Если идет первое добавление новых слов
-        if (!this.$store.getters.getWordsAdd) {
-          console.log("DELETEALL ARRAY")
-          //  удалил старые слова
-          // this.$store.commit("DELETE_WORDS");
-          // this.$store.commit("MAXID_NULL")
-          this.$store.dispatch("LOAD_SAVE_WORDS").then(() => {
-            this.$store.dispatch("ADD_NEW_WORDS", this.obj);
-          })
-          //  поставил флажок, что загружаю новые слова
-          this.$store.commit("isWordsAdd", true);
-        } else {
-          //  Передаем объект с новыми словами
-          this.$store.dispatch("ADD_NEW_WORDS", this.obj);
-        }
+        this.$store.dispatch("LENGTH_DATA_WORDS").then((length) => {
+          let obj = {
+            eng: this.eng,
+            rus: this.rus,
+            length: length
+          }
+          this.$store.dispatch("ADD_NEW_WORDS", obj );
+        })
 
+
+
+
+        // Если идет первое добавление новых слов
+        // if (!this.$store.getters.getWordsAdd) {
+        //   console.log("DELETEALL ARRAY")
+        //   //  удалил старые слова
+        //   // this.$store.commit("DELETE_WORDS");
+        //   // this.$store.commit("MAXID_NULL")
+        //   this.$store.dispatch("IS_EXIST_WORDS").then(() => {
+        //     this.$store.dispatch("ADD_NEW_WORDS", this.obj);
+        //   })
+        //   //  поставил флажок, что загружаю новые слова
+        //   this.$store.commit("isWordsAdd", true);
+        // } else {
+        //   //  Передаем объект с новыми словами
+        //   this.$store.dispatch("ADD_NEW_WORDS", this.obj);
+        // }
+
+      }
+    },
+    computed: {
+      activeBtn() {
+        return !!this.eng && !!this.rus
       }
     }
   };
