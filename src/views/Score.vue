@@ -16,7 +16,7 @@
         </v-layout>
       </v-container>
     </v-content>
-  
+
   </v-app>
 </template>
 
@@ -36,9 +36,9 @@
       },
       getCounterMax() {
         return this.$store.getters.getCounterMax;
-      }, 
+      },
     },
-  
+
     mounted() {
       // Зарегистрирован ли пользователь
       if (this.$store.getters.userId) {
@@ -52,10 +52,17 @@
           );
         }
       }
+      this.$store.dispatch('COMMON_MAX_SCORE').then((maxScore) => {
+
+        if (maxScore < this.counterNow) {
+          console.log("ym ")
+          this.$store.dispatch('COMMON_MAX_SCORE_SET', maxScore)
+        }
+      })
     }
   };
 </script>
 
 <style scoped>
-  
+
 </style>

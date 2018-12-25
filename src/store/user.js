@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import { reject } from 'q';
 
 export default {
     state: {
@@ -6,6 +7,7 @@ export default {
             isAuthenticated: false,
             uid: null
         },
+        unsubscribeAuth: null
     },
     mutations: {
         SET_USER(state, payload) {
@@ -18,8 +20,23 @@ export default {
                 uid: null
             }
         },
+        SET_UNSUBSCRIBE_AUTH(state, payload) {
+            state.unsubscribeAuth = payload
+        }
     },
     actions: {
+
+        INIT_AUTH(state) {
+            return new Promise((resolve, reject) => {
+                if (state.unsubscribeAuth)
+                    state.unsubscribeAuth()
+                let unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+                    state.dispatch('STATE_CHANGED', user)
+                    resolve(user)
+                });
+                state.commit('SET_UNSUBSCRIBE_AUTH', unsubscribe)
+            })
+        },
         // Регистрация пользователя
         SIGNUP({ commit }, payload) {
             commit('SET_PROCESSING', true)
@@ -48,14 +65,25 @@ export default {
         },
 
         // Аутентифицирован ли пользователь ?!
-        STATE_CHANGED( state, payload) {
+        STATE_CHANGED(state, payload) {
             return new Promise((resolve) => {
                 if (payload) {
                     state.commit('SET_USER', payload.uid);
                     state.dispatch('LOAD_USER_DATA', payload.uid);
+
+                    state
+                        .dispatch("LENGTH_DATA_WORDS")
+                        .then(length => {
+                            if (length != 0) {
+                                state.dispatch("LOAD_SAVE_WORDS");
+                            } else {
+                                state.dispatch("LOAD_WORDS");
+                            }
+                        });
                     resolve();
                 } else {
                     state.commit('UNSET_USER')
+                    state.dispatch("LOAD_WORDS");
                 }
             })
         },

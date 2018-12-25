@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { resolve } from 'q';
 let defaultmaxScore = {
     scoreAndDate: {
         maxScore: 0
@@ -9,6 +10,7 @@ export default {
         counter: 0,
         maxCounter: 0,
         maxCounterGameMax: 0,
+        commonScore: 0
     },
     mutations: {
         lolo(state, payload) {
@@ -29,11 +31,14 @@ export default {
         ADD_USER_BOOK(state, payload) {
             state.maxCounter = payload
         },
+        COMMON_SCORE(state, payload) {
+            state.commonScore = payload
+        },
     },
     actions: {
         LOAD_USER_DATA({ commit }, payload) {
             commit('SET_PROCESSING', true)
-            
+
             let userDataRef = Vue.$db.collection('userData').doc(payload)
 
             userDataRef.get()
@@ -72,7 +77,29 @@ export default {
                 .catch(() => {
                     commit('SET_PROCESSING', false)
                 });
-        }
+        },
+        COMMON_MAX_SCORE(state) {
+            return new Promise((resolve)  => {
+                let maxScore = Vue.$db.collection('maxScore').doc('topScore')
+                maxScore.get()
+                    .then((data) => {
+                        let userScore = data.data()
+
+                        resolve(userScore.payload)
+                    })
+            })
+        },
+        COMMON_MAX_SCORE_SET(state,payload) {
+                let maxScore = Vue.$db.collection('maxScore').doc('topScore')
+let score = {
+    maxnumber: payload
+}
+console.log(payload, score)
+                maxScore.set({score})
+                state.commit('COMMON_SCORE', payload)
+        },
+
+
     },
 
     getters: {
