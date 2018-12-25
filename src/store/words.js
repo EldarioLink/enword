@@ -107,15 +107,23 @@ export default {
                     })
             })
         },
-        DELETE_DATA_WORDS(state) {
-            return new Promise((resolve) => {
-                Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords').docs().delete()
-                    .then(() => {
-                       resolve();
-                    })
-
-
-            })
+        DELETE_DATA_WORDS(state, payload) {
+            var asyncLoop = function (o) {
+                var i = 0;
+                var loop = function () {
+                    i++;
+                    if (i > o.length) { return; }
+                    o.functionToLoop(loop, i);
+                }
+                loop();
+            }
+            asyncLoop({
+                length: payload,
+                functionToLoop: function (loop, i) {
+                    Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords').doc('word' + i).delete()
+                    loop()
+                },
+            });
         }
     },
     getters: {
