@@ -82,7 +82,14 @@
     },
     mounted() {
       this.counterNull();
+      this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
+        if (!length == 0) {
+          this.$store.dispatch("LOAD_SAVE_WORDS");
+        } else {
+          this.$store.dispatch("LOAD_WORDS");
 
+        }
+      })
       this.maxId = this.$store.getters.getmaxId;
     },
     destroyed() {
