@@ -34,27 +34,6 @@ new Vue({
   store,
   render: h => h(App),
   created() {
-    let vm = this
-    // наблюдатель который вызывается при изменений состояния входа пользователя
-    firebase.auth().onAuthStateChanged((user) => {
-      vm.$store.dispatch('STATE_CHANGED', user).then(() => {
-        if (this.$store.getters.userId) {
-          this.$store
-            .dispatch("LENGTH_DATA_WORDS")
-            .then(length => {
-              if (length != 0) {
-                this.$store.dispatch("LOAD_SAVE_WORDS");
-              } else {
-                this.$store.dispatch("LOAD_WORDS");
-              }
-            });
-        }
-      })
-
-
-    });
-
-
 
   },
 
