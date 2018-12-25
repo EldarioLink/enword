@@ -58,7 +58,7 @@
         });
       },
       deleteWord() {
-        this.$confirm("Вы действительно хотите удалить базу слов?").then(res => {
+        this.$confirm("Вы действительно хотите удалить базу слов? (Останется стандартная база слов)").then(res => {
           if (res) {
             this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
               this.$store.dispatch("DELETE_DATA_WORDS", length).then(() => {
