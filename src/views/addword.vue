@@ -62,7 +62,6 @@
           if (res) {
             this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
               this.$store.dispatch("DELETE_DATA_WORDS", length).then(() => {
-                console.log("delete all word")
               });
             })
           }
