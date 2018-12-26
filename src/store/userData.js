@@ -10,7 +10,7 @@ export default {
         counter: 0,
         maxCounter: 0,
         maxCounterGameMax: 0,
-        commonScore: 0
+        highScore: 0
     },
     mutations: {
         lolo(state, payload) {
@@ -28,11 +28,11 @@ export default {
         LOAD_USER_DATA(state, payload) {
             state.maxCounter = payload.maxScore
         },
-        ADD_USER_BOOK(state, payload) {
+        SET_USER_MAXSCORE(state, payload) {
             state.maxCounter = payload
         },
-        COMMON_SCORE(state, payload) {
-            state.commonScore = payload
+        SET_COMMON_SCORE(state, payload) {
+            state.highScore = payload
         },
     },
     actions: {
@@ -57,7 +57,7 @@ export default {
                 });
 
         },
-        ADD_USER_BOOK({ commit, getters }, payload) {
+        SET_USER_SCORE({ commit, getters }, payload) {
             commit('SET_PROCESSING', true)
             let userDataRef = Vue.$db.collection('userData').doc(getters.userId)
 
@@ -71,32 +71,30 @@ export default {
 
             })
                 .then(() => {
-                    commit('ADD_USER_BOOK', payload)
+                    commit('SET_USER_MAXSCORE', payload)
                     commit('SET_PROCESSING', false)
                 })
                 .catch(() => {
                     commit('SET_PROCESSING', false)
                 });
         },
-        COMMON_MAX_SCORE(state) {
-            return new Promise((resolve)  => {
+        COMMON_MAX_SCORE_GET(state) {
+            return new Promise((resolve) => {
                 let maxScore = Vue.$db.collection('maxScore').doc('topScore')
                 maxScore.get()
                     .then((data) => {
                         let userScore = data.data()
-
-                        resolve(userScore.payload)
+                        resolve(userScore.maxnumber)
                     })
             })
         },
-        COMMON_MAX_SCORE_SET(state,payload) {
-                let maxScore = Vue.$db.collection('maxScore').doc('topScore')
-let score = {
-    maxnumber: payload
-}
-console.log(payload, score)
-                maxScore.set({score})
-                state.commit('COMMON_SCORE', payload)
+        COMMON_MAX_SCORE_SET(state, payload) {
+            let maxScore = Vue.$db.collection('maxScore').doc('topScore')
+            let score = {
+                maxnumber: payload
+            }
+            maxScore.set(score)
+            state.commit('COMMON_SCORE', payload)
         },
 
 
@@ -104,7 +102,8 @@ console.log(payload, score)
 
     getters: {
         getCounter: (state) => state.counter,
-        getCounterMax: (state) => state.maxCounter,
+        getmaxCounter: (state) => state.maxCounter,
         getCounterMaxGame: (state) => state.maxCounterGameMax,
+        gethighScore: (state) => state.highScore
     }
 }

@@ -34,29 +34,27 @@
       counterNow() {
         return this.$store.getters.getCounter;
       },
-      getCounterMax() {
-        return this.$store.getters.getCounterMax;
+      getmaxCounter() {
+        return this.$store.getters.getmaxCounter;
       },
     },
 
     mounted() {
       // Зарегистрирован ли пользователь
       if (this.$store.getters.userId) {
-        // Поставлен ли рекорд
+        // Устанавливаем рекорд in MaxScore
         this.$store.commit("setmaxCounter");
         // Если рекорд, то сохраняем значение в firebase
-        if (this.getCounterMax < this.counterNow) {
+        if (this.getmaxCounter < this.counterNow) {
           this.$store.dispatch(
-            "ADD_USER_BOOK",
-            this.$store.getters.getCounterMaxGame
+            "SET_USER_SCORE",
+            this.counterNow
           );
         }
       }
-      this.$store.dispatch('COMMON_MAX_SCORE').then((maxScore) => {
-
+      this.$store.dispatch('COMMON_MAX_SCORE_GET').then((maxScore) => {
         if (maxScore < this.counterNow) {
-          console.log("ym ")
-          this.$store.dispatch('COMMON_MAX_SCORE_SET', maxScore)
+          this.$store.dispatch('COMMON_MAX_SCORE_SET', this.counterNow)
         }
       })
     }
