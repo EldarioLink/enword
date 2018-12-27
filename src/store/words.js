@@ -29,27 +29,32 @@ export default {
 
     },
     actions: {
+
         ADD_NEW_WORDS(state, payload) {
-            state.commit('maxID', payload.length)
-            state.commit('INCREMENT_MAXID', 1)
-            state.commit('SET_PROCESSING', true)
-            this.docId = "word" + state.getters.getmaxId
-            let userDataRef = Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords').doc(this.docId)
+            return new Promise((resolve) => {
+                state.commit('maxID', payload.length)
+                state.commit('INCREMENT_MAXID', 1)
+                state.commit('SET_PROCESSING', true)
+                this.docId = "word" + state.getters.getmaxId
+                let userDataRef = Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords').doc(this.docId)
 
-            let word = {
-                eng: payload.eng,
-                rus: payload.rus,
-                id: state.getters.getmaxId
-            }
+                let word = {
+                    eng: payload.eng,
+                    rus: payload.rus,
+                    id: state.getters.getmaxId
+                }
 
-            userDataRef.set(word)
-                .then(() => {
-                    state.dispatch('LOAD_SAVE_WORDS')
-                    state.commit('SET_PROCESSING', false)
-                })
-                .catch(() => {
-                    state.commit('SET_PROCESSING', false)
-                });
+                userDataRef.set(word)
+                    .then(() => {
+                        state.dispatch('LOAD_SAVE_WORDS').then(() => {
+                            resolve()
+                        })
+                    })
+                    .catch(() => {
+                        state.commit('SET_PROCESSING', false)
+                    });
+            })
+
         },
         LOAD_WORDS(state) {
             Vue.$db.collection('words')

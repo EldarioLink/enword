@@ -4,7 +4,7 @@
             <v-parallax :src="require('@/assets/hero.jpeg')" height="600">
                 <v-layout column align-center justify-center class="white--text">
                     <h1 class="white--text mb-2 display-1 text-xs-center">EnWord</h1>
-                    <v-btn class="teal lighten-2 mt-5" dark large href="/start">
+                    <v-btn class="teal lighten-2 mt-5" dark large @click="getStart">
                         Get Started
                     </v-btn>
                 </v-layout>
@@ -86,6 +86,11 @@
         computed: {
             highScore() {
                 return this.$store.getters.gethighScore
+            }
+        },
+        methods: {
+            getStart() {
+                this.$router.push("/start");
             }
         },
         mounted() {
