@@ -16,6 +16,9 @@
         <v-layout mt-4 align-center justify-center row>
           <v-btn @click="addwords()" v-if="activeBtn" color="success">Добавить</v-btn>
         </v-layout>
+        <v-layout v-if="activeDone" style="font-size:20px" class="blue--text" align-center justify-center row fill-height>
+          Слово добавлено!
+        </v-layout>
       </v-container>
       <v-container>
         <v-alert :value="true" color="warning" icon="warning" outline>Если вы добавите слова, то список будет содержать только их.</v-alert>
@@ -36,14 +39,7 @@
       return {
         eng: undefined,
         rus: undefined,
-        engRules: [
-          v => !!v || "Пожалуйста введите слово", // Если пустое поле
-          v => /^\w+([\.-]?\w+)+$/.test(v) || "Неправильное английское слово" // Стандартный регуляр экспрешшн
-        ],
-        rusRules: [
-          v => !!v || "Пожалуйста введите слово",
-          v => /[\wа-я]+/gi.test(v) || "Неправильный перевод"
-        ]
+        showingDone: false
       };
     },
     methods: {
@@ -54,15 +50,20 @@
             rus: this.rus,
             length: length
           };
-          this.$store.dispatch("ADD_NEW_WORDS", obj);
+          this.$store.dispatch("ADD_NEW_WORDS", obj).then(() => {
+            this.rus = '',
+              this.eng = '';
+            if (this.showingDone == false) {
+              this.showingDone = !this.showingDone
+            }
+          });
         });
       },
       deleteWord() {
         this.$confirm("Вы действительно хотите удалить базу слов? (Останется стандартная база слов)").then(res => {
           if (res) {
             this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
-              this.$store.dispatch("DELETE_DATA_WORDS", length).then(() => {
-              });
+              this.$store.dispatch("DELETE_DATA_WORDS", length).then(() => {});
             })
           }
         });
@@ -71,7 +72,12 @@
     computed: {
       activeBtn() {
         return !!this.eng && !!this.rus;
-      }
+      },
+      activeDone() {
+        return !this.eng && !this.rus && this.showingDone
+      },
+
+
     }
   };
 </script>
