@@ -17,7 +17,7 @@
                     <div class="text-xs-center">
                         <v-container>
                             <v-layout style="font-size:20px" class="blue--text" align-center justify-center row fill-height>
-                                MAX SCORE AMONG ALL USERS - {{ highScore }}
+                                  <v-icon x-large class="red--text text--lighten-2">insert_emoticon</v-icon>  MAX SCORE AMONG ALL USERS - {{ highScore }}
                             </v-layout>
                         </v-container>
                     </div>
@@ -28,42 +28,39 @@
                             <v-flex xs12 md4>
                                 <v-card class="elevation-0 transparent">
                                     <v-card-text class="text-xs-center">
-                                        <v-icon x-large class="blue--text text--lighten-2">color_lens</v-icon>
+                                        <v-icon x-large class="blue--text text--lighten-2">check_circle</v-icon>
                                     </v-card-text>
                                     <v-card-title primary-title class="layout justify-center">
-                                        <div class="headline text-xs-center">Material Design</div>
+                                        <div class="headline text-xs-center">Поставьте рекорд переведенных слов</div>
                                     </v-card-title>
                                     <v-card-text>
-                                        Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse
-                                        potenti.
+                                        В течение одной минуты, постарайтесь правильно перевести на русский язык большее количество слов. Таймер включается после начала ввода слова!
                                     </v-card-text>
                                 </v-card>
                             </v-flex>
                             <v-flex xs12 md4>
                                 <v-card class="elevation-0 transparent">
                                     <v-card-text class="text-xs-center">
-                                        <v-icon x-large class="blue--text text--lighten-2">flash_on</v-icon>
+                                        <v-icon x-large class="blue--text text--lighten-2">info</v-icon>
                                     </v-card-text>
                                     <v-card-title primary-title class="layout justify-center">
-                                        <div class="headline">Fast development</div>
+                                        <div class="headline text-xs-center">Есть возможность посмотреть перевод</div>
                                     </v-card-title>
                                     <v-card-text>
-                                        Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse
-                                        potenti.
+                                        Во время перевода слов, у вас будет неограниченное кол-во возможности посмотреть перевод слова. Нажав на иконку<v-icon size="18">help</v-icon>
                                     </v-card-text>
                                 </v-card>
                             </v-flex>
                             <v-flex xs12 md4>
                                 <v-card class="elevation-0 transparent">
                                     <v-card-text class="text-xs-center">
-                                        <v-icon x-large class="blue--text text--lighten-2">build</v-icon>
+                                        <v-icon x-large class="blue--text text--lighten-2">how_to_reg</v-icon>
                                     </v-card-text>
                                     <v-card-title primary-title class="layout justify-center">
-                                        <div class="headline text-xs-center">Completely Open Sourced</div>
+                                        <div class="headline text-xs-center">Есть возможность добавления новых слов</div>
                                     </v-card-title>
                                     <v-card-text>
-                                        Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse
-                                        potenti.
+                                        Зарегистрируйтесь, и у вас будет возможность фиксировать ваш максимальный счёт. А также появится возможность добавления новых слов!
                                     </v-card-text>
                                 </v-card>
                             </v-flex>
