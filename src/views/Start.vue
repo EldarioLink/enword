@@ -23,9 +23,13 @@
         </v-layout>
       </v-container>
       <v-layout justify-end>
-        <v-btn @click="addWords()" fixed fab dark color="indigo">
-          <v-icon dark>add</v-icon>
-        </v-btn>
+       <v-btn
+        slot="activator"
+        color="red lighten-2"
+        dark
+      >
+        Click Me
+      </v-btn>
       </v-layout>
     </v-content>
   </v-app>
