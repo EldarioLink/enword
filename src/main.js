@@ -6,11 +6,13 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import firebaseConfig from './config/firebase'
 import firebase from 'firebase'
+import VueLodash from 'lodash'
 import 'firebase/firestore'
 import VuetifyConfirm from 'vuetify-confirm'
 
 
 Vue.use(Vuetify)
+Vue.use(VueLodash)
 
 Vue.config.productionTip = false
 const firebaseApp = firebase.initializeApp(firebaseConfig);

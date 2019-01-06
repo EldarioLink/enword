@@ -3,6 +3,7 @@ import Vue from 'vue'
 export default {
     state: {
         words: [],
+        deleteWords: [],
         maxId: 0,
         isWordsAdd: false,
         docId: undefined
@@ -10,6 +11,9 @@ export default {
     mutations: {
         SET_WORDS(state, payload) {
             state.words = payload
+        },
+        SET_WORDS_DIALOG(state, payload) {
+            state.deleteWords = payload
         },
         INCREMENT_MAXID(state, payload) {
             state.maxId += payload
@@ -19,6 +23,9 @@ export default {
         },
         DELETE_WORDS(state) {
             state.words.length = 0
+        },
+        DELETE_WORDS_DIALOG(state) {
+            state.deleteWords.length = 0
         },
         maxID(state, payload) {
             state.maxId = payload;
@@ -129,12 +136,35 @@ export default {
                     loop()
                 },
             });
+        },
+        deleteWords(state) {
+            state.commit('DELETE_WORDS_DIALOG')
+            Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
+                .get()
+                .then(querySnapshot => {
+                    let words = []
+                    querySnapshot.forEach(s => {
+                        const data = s.data()
+                        let word = {
+                            id: data.id,
+                            eng: data.eng,
+                            rus: data.rus
+                        }
+
+                        deleteWords.push(word)
+
+                    })
+                    state.commit('SET_WORDS_DIALOG', deleteWords)
+
+                })
+                .catch(error => console.log(error))
         }
     },
     getters: {
         getWords: (state) => state.words,
         getmaxId: (state) => state.maxId,
         getWordsAdd: (state) => state.isWordsAdd,
+        getdeleteWords: (state) => state.deleteWords
     },
 
 }

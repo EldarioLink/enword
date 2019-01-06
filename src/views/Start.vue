@@ -35,34 +35,60 @@
               </v-card-title>
 
               <v-content>
-      <v-container>
-        <v-layout style="color:#009688;font-size:20px" align-center justify-center row>Поле для ввода английского слова</v-layout>
-        <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
-          <input v-model="eng" style="border: solid 1px #009688" :rules="engRules">
-        </v-layout>
-      </v-container>
-      <v-container>
-        <v-layout style="color:#009688;font-size:20px" align-center justify-center row>Поле для ввода перевода</v-layout>
-        <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
-          <input v-model="rus" style="border: solid 1px #009688" :rules="rusRules">
-        </v-layout>
+                <v-container>
+                  <v-layout style="color:#009688;font-size:20px" align-center justify-center row>Поле для ввода английского слова</v-layout>
+                  <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
+                    <input v-model="eng" style="border: solid 1px #009688">
+                  </v-layout>
+                </v-container>
+                <v-container>
+                  <v-layout style="color:#009688;font-size:20px" align-center justify-center row>Поле для ввода перевода</v-layout>
+                  <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
+                    <input v-model="rus" style="border: solid 1px #009688">
+                  </v-layout>
 
-        <v-layout mt-4 align-center justify-center row>
-          <v-btn @click="addwords()" v-if="activeBtn" color="success">Добавить</v-btn>
-        </v-layout>
-        <v-layout v-if="activeDone" style="font-size:20px" class="blue--text" align-center justify-center row fill-height>
-          Слово добавлено!
-        </v-layout>
-      </v-container>
-      <v-container>
-        <v-alert :value="true" color="warning" icon="warning" outline>Если вы добавите слова, то список будет содержать только их.</v-alert>
-      </v-container>
-      <v-container>
-        <v-layout mt-4 align-center justify-center>
-          <v-btn @click="deleteWord" color="error">Удалить слова</v-btn>
-        </v-layout>
-      </v-container>
-    </v-content>
+                  <v-layout mt-4 align-center justify-center row>
+                    <v-btn @click="addwords()" v-if="activeBtn" color="success">Добавить</v-btn>
+                  </v-layout>
+                  <v-layout v-if="activeDone" style="font-size:20px" class="blue--text" align-center justify-center row fill-height>
+                    Слово добавлено!
+                  </v-layout>
+                  <v-alert :value="true" color="warning" icon="warning" outline>Если вы добавите слова, то список будет содержать только их.</v-alert>
+                </v-container>
+                <v-divider></v-divider>
+                <v-container>
+                  <v-layout mt-4 align-center justify-center>
+                    <v-btn @click="deleteWord" color="error">Показать слова</v-btn>
+                  </v-layout>
+                </v-container>
+
+
+                <!-- dddddddddddd-->
+                <v-container grid-list-md text-xs-center>
+                  <v-layout v-if="wordsForDelete" row wrap>
+                    <v-flex xs4 v-for="wordsForDelete in collection" :key="wordsForDelete">
+                      <v-card-text>
+                        {{ wordsForDelete }}
+                      </v-card-text>
+                    </v-flex>
+                    <v-container align-center>
+                      <v-btn v-for="p in pagination.pages" :key="p" @click.prevent="setPage(p)">{{ p }}</v-btn>
+                    </v-container>
+                    <v-container align-center>
+                      Displaying from {{ pagination.startIndex }} to {{ pagination.endIndex }}
+                    </v-container>
+                  </v-layout>
+                  <v-layout v-else row wrap>
+                    <v-flex xs4>
+                      <v-card-text>
+                        Нет добавленных слов!
+                      </v-card-text>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+
+
+              </v-content>
             </v-card>
           </v-dialog>
         </div>
@@ -86,7 +112,10 @@
         dialog: false,
         eng: undefined,
         rus: undefined,
-        showingDone: false
+        showingDone: false,
+        abrakadabra: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "j", "h", "u", "z"],
+        perPage: 15,
+        pagination: {}
       };
     },
     methods: {
@@ -123,7 +152,7 @@
       addWords() {
         this.$router.push("/addword");
       },
-         addwords() {
+      addwords() {
         this.$store.dispatch("LENGTH_DATA_WORDS").then(length => {
           let obj = {
             eng: this.eng,
@@ -140,14 +169,27 @@
         });
       },
       deleteWord() {
-        this.$confirm("Вы действительно хотите удалить базу слов? (Останется стандартная база слов)").then(res => {
-          if (res) {
-            this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
-              this.$store.dispatch("DELETE_DATA_WORDS", length).then(() => {});
-            })
-          }
-        });
+        this.$store.dispatch("deleteWords")
+      },
+      setPage(p) {
+        this.pagination = this.paginator(this.abrakadabra.length, p)
+      },
+      paginate(abrakadabra) {
+        return _.slice(abrakadabra, this.pagination.startIndex, this.pagination.endIndex + 1)
+      },
+      paginator(totalItems, currentPage) {
+        var startIndex = (currentPage - 1) * this.perPage,
+          endIndex = Math.min(startIndex + this.perPage - 1, totalItems - 1);
+        return {
+          currentPage: currentPage,
+          startIndex: startIndex,
+          endIndex: endIndex,
+          pages: _.range(1, Math.ceil(totalItems / this.perPage) + 1)
+        };
       }
+    },
+    created() {
+      this.setPage(1);
     },
     mounted() {
       this.counterNull();
@@ -163,12 +205,18 @@
       counter() {
         return this.$store.getters.getCounter;
       },
-          activeBtn() {
+      activeBtn() {
         return !!this.eng && !!this.rus;
       },
       activeDone() {
         return !this.eng && !this.rus && this.showingDone
       },
+      wordsForDelete() {
+        return this.$store.getters.getdeleteWords
+      },
+      collection() {
+        return this.paginate(this.abrakadabra)
+      }
     }
   };
 </script>
