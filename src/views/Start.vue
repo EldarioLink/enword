@@ -24,29 +24,45 @@
       </v-container>
       <v-layout justify-end>
         <div class="text-xs-center">
-          <v-dialog v-model="dialog" width="500">
+          <v-dialog v-model="dialog" width="900">
             <v-btn slot="activator" fab dark color="indigo">
               <v-icon dark>add</v-icon>
             </v-btn>
 
             <v-card>
               <v-card-title class="headline grey lighten-2" primary-title>
-                Privacy Policy
+                Добавьте слово
               </v-card-title>
 
-              <v-card-text>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </v-card-text>
+              <v-content>
+      <v-container>
+        <v-layout style="color:#009688;font-size:20px" align-center justify-center row>Поле для ввода английского слова</v-layout>
+        <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
+          <input v-model="eng" style="border: solid 1px #009688" :rules="engRules">
+        </v-layout>
+      </v-container>
+      <v-container>
+        <v-layout style="color:#009688;font-size:20px" align-center justify-center row>Поле для ввода перевода</v-layout>
+        <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
+          <input v-model="rus" style="border: solid 1px #009688" :rules="rusRules">
+        </v-layout>
 
-              <v-divider></v-divider>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" flat @click="dialog = false">
-                  I accept
-                </v-btn>
-              </v-card-actions>
+        <v-layout mt-4 align-center justify-center row>
+          <v-btn @click="addwords()" v-if="activeBtn" color="success">Добавить</v-btn>
+        </v-layout>
+        <v-layout v-if="activeDone" style="font-size:20px" class="blue--text" align-center justify-center row fill-height>
+          Слово добавлено!
+        </v-layout>
+      </v-container>
+      <v-container>
+        <v-alert :value="true" color="warning" icon="warning" outline>Если вы добавите слова, то список будет содержать только их.</v-alert>
+      </v-container>
+      <v-container>
+        <v-layout mt-4 align-center justify-center>
+          <v-btn @click="deleteWord" color="error">Удалить слова</v-btn>
+        </v-layout>
+      </v-container>
+    </v-content>
             </v-card>
           </v-dialog>
         </div>
@@ -67,7 +83,10 @@
         setInt: true,
         showHelp: false,
         timeinterval: undefined,
-        dialog: false
+        dialog: false,
+        eng: undefined,
+        rus: undefined,
+        showingDone: false
       };
     },
     methods: {
@@ -103,6 +122,31 @@
       },
       addWords() {
         this.$router.push("/addword");
+      },
+         addwords() {
+        this.$store.dispatch("LENGTH_DATA_WORDS").then(length => {
+          let obj = {
+            eng: this.eng,
+            rus: this.rus,
+            length: length
+          };
+          this.$store.dispatch("ADD_NEW_WORDS", obj).then(() => {
+            this.rus = '',
+              this.eng = '';
+            if (this.showingDone == false) {
+              this.showingDone = !this.showingDone
+            }
+          });
+        });
+      },
+      deleteWord() {
+        this.$confirm("Вы действительно хотите удалить базу слов? (Останется стандартная база слов)").then(res => {
+          if (res) {
+            this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
+              this.$store.dispatch("DELETE_DATA_WORDS", length).then(() => {});
+            })
+          }
+        });
       }
     },
     mounted() {
@@ -118,7 +162,13 @@
       },
       counter() {
         return this.$store.getters.getCounter;
-      }
+      },
+          activeBtn() {
+        return !!this.eng && !!this.rus;
+      },
+      activeDone() {
+        return !this.eng && !this.rus && this.showingDone
+      },
     }
   };
 </script>
