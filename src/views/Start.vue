@@ -53,21 +53,22 @@
                   <v-layout v-if="activeDone" style="font-size:20px" class="blue--text" align-center justify-center row fill-height>
                     Слово добавлено!
                   </v-layout>
-                  <v-alert :value="true" color="warning" icon="warning" outline>Если вы добавите слова, то список будет содержать только их.</v-alert>
                 </v-container>
                 <v-divider></v-divider>
                 <v-container>
                   <v-layout mt-4 align-center justify-center>
-                    <v-btn @click="deleteWord" color="error">Показать слова</v-btn>
+                    <v-btn v-if="!hideWordsSection" @click="deleteWord" color="error">Показать слова</v-btn>
+                    <v-btn v-else @click="hideWords" color="error">Скрыть слова</v-btn>
                   </v-layout>
                 </v-container>
 
 
                 <!-- dddddddddddd-->
-                <v-container v-if="btnPress" grid-list-md text-xs-center>
-                  <v-layout v-if="wordsForDelete" row wrap>
-                    <v-flex xs4 v-for="wordsForDelete in collection" :key="wordsForDelete.id">
-                      {{ wordsForDelete.eng }}
+                <v-container v-show ="hideWordsSection" grid-list-md text-xs-center>
+                  <v-layout v-if="existWordForDelete" row wrap>
+                    <v-flex xs4 v-for="word in collection" :key="word.id">
+                      {{ word.eng }}
+                   <v-icon size="15">close</v-icon>
                     </v-flex>
                     <v-container align-center>
                       <v-btn v-for="p in pagination.pages" :key="p.id" @click.prevent="setPage(p)">{{ p }}</v-btn>
@@ -109,7 +110,7 @@
         showingDone: false,
         perPage: 15,
         pagination: {},
-        btnPress: false
+        hideWordsSection: false,
       };
     },
     methods: {
@@ -143,9 +144,6 @@
       getHelp() {
         return (this.showHelp = !this.showHelp);
       },
-      addWords() {
-        this.$router.push("/addword");
-      },
       addwords() {
         this.$store.dispatch("LENGTH_DATA_WORDS").then(length => {
           let obj = {
@@ -165,7 +163,7 @@
       deleteWord() {
         this.$store.dispatch("deleteWords").then(() => {
           this.setPage(1);
-          this.btnPress = !this.btnPress
+          this.hideWordsSection = !this.hideWordsSection
         })
       },
       setPage(p) {
@@ -183,6 +181,9 @@
           endIndex: endIndex,
           pages: _.range(1, Math.ceil(totalItems / this.perPage) + 1)
         };
+      },
+      hideWords(){
+        this.hideWordsSection = false;
       }
     },
     created() {
@@ -208,16 +209,15 @@
       activeDone() {
         return !this.eng && !this.rus && this.showingDone
       },
-      wordsForDelete() {
+      existWordForDelete() {
         return this.$store.getters.getdeleteWords.length != 0
       },
       collection() {
         return this.paginate(this.$store.getters.getdeleteWords)
-      }
+      },
     }
   };
 </script>
 
 <style scoped>
-
 </style>
