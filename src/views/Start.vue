@@ -66,9 +66,9 @@
                 <!-- dddddddddddd-->
                 <v-container v-show ="hideWordsSection" grid-list-md text-xs-center>
                   <v-layout v-if="existWordForDelete" row wrap>
-                    <v-flex xs4 v-for="word in collection" :key="word.id">
+                    <v-flex  xs4 v-for="word in collection" :key="word.id">
                       {{ word.eng }}
-                   <v-icon size="15">close</v-icon>
+                   <v-icon @click="machine(word)" size="15">close</v-icon>
                     </v-flex>
                     <v-container align-center>
                       <v-btn v-for="p in pagination.pages" :key="p.id" @click.prevent="setPage(p)">{{ p }}</v-btn>
@@ -184,6 +184,9 @@
       },
       hideWords(){
         this.hideWordsSection = false;
+      },
+      machine(m){
+        console.log(m.id)
       }
     },
     created() {

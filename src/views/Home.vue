@@ -17,7 +17,7 @@
                     <div class="text-xs-center">
                         <v-container>
                             <v-layout style="font-size:20px" class="blue--text" align-center justify-center row fill-height>
-                                  <v-icon x-large class="red--text text--lighten-2">insert_emoticon</v-icon>  MAX SCORE AMONG ALL USERS - {{ highScore }}
+                                  <v-icon x-large class="red--text text--lighten-2">insert_emoticon</v-icon>  MAX SCORE AMONG ALL USERS : {{ highScore }}
                             </v-layout>
                         </v-container>
                     </div>
