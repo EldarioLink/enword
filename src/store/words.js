@@ -138,26 +138,28 @@ export default {
             });
         },
         deleteWords(state) {
-            state.commit('DELETE_WORDS_DIALOG')
-            Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
-                .get()
-                .then(querySnapshot => {
-                    let words = []
-                    querySnapshot.forEach(s => {
-                        const data = s.data()
-                        let word = {
-                            id: data.id,
-                            eng: data.eng,
-                            rus: data.rus
-                        }
+            return new Promise((resolve) => {
+                state.commit('DELETE_WORDS_DIALOG')
+                Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
+                    .get()
+                    .then(querySnapshot => {
+                        let deleteWords = []
+                        querySnapshot.forEach(s => {
+                            const data = s.data()
+                            let word = {
+                                id: data.id,
+                                eng: data.eng,
+                                rus: data.rus
+                            }
 
-                        deleteWords.push(word)
+                            deleteWords.push(word)
 
+                        })
+                        state.commit('SET_WORDS_DIALOG', deleteWords)
+                        return resolve();
                     })
-                    state.commit('SET_WORDS_DIALOG', deleteWords)
-
-                })
-                .catch(error => console.log(error))
+                    .catch(error => console.log(error))
+            })
         }
     },
     getters: {

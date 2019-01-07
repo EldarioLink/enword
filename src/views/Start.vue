@@ -64,30 +64,24 @@
 
 
                 <!-- dddddddddddd-->
-                <v-container grid-list-md text-xs-center>
+                <v-container v-if="btnPress" grid-list-md text-xs-center>
                   <v-layout v-if="wordsForDelete" row wrap>
-                    <v-flex xs4 v-for="wordsForDelete in collection" :key="wordsForDelete">
-                      <v-card-text>
-                        {{ wordsForDelete }}
-                      </v-card-text>
+                    <v-flex xs4 v-for="wordsForDelete in collection" :key="wordsForDelete.id">
+                      {{ wordsForDelete.eng }}
                     </v-flex>
                     <v-container align-center>
-                      <v-btn v-for="p in pagination.pages" :key="p" @click.prevent="setPage(p)">{{ p }}</v-btn>
+                      <v-btn v-for="p in pagination.pages" :key="p.id" @click.prevent="setPage(p)">{{ p }}</v-btn>
                     </v-container>
                     <v-container align-center>
                       Displaying from {{ pagination.startIndex }} to {{ pagination.endIndex }}
                     </v-container>
                   </v-layout>
                   <v-layout v-else row wrap>
-                    <v-flex xs4>
-                      <v-card-text>
-                        Нет добавленных слов!
-                      </v-card-text>
-                    </v-flex>
+                    <v-card-text align-center justify-center>
+                      Нет добавленных слов!
+                    </v-card-text>
                   </v-layout>
                 </v-container>
-
-
               </v-content>
             </v-card>
           </v-dialog>
@@ -113,9 +107,9 @@
         eng: undefined,
         rus: undefined,
         showingDone: false,
-        abrakadabra: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "j", "h", "u", "z"],
         perPage: 15,
-        pagination: {}
+        pagination: {},
+        btnPress: false
       };
     },
     methods: {
@@ -169,10 +163,13 @@
         });
       },
       deleteWord() {
-        this.$store.dispatch("deleteWords")
+        this.$store.dispatch("deleteWords").then(() => {
+          this.setPage(1);
+          this.btnPress = !this.btnPress
+        })
       },
       setPage(p) {
-        this.pagination = this.paginator(this.abrakadabra.length, p)
+        this.pagination = this.paginator(this.$store.getters.getdeleteWords.length, p)
       },
       paginate(abrakadabra) {
         return _.slice(abrakadabra, this.pagination.startIndex, this.pagination.endIndex + 1)
@@ -212,10 +209,10 @@
         return !this.eng && !this.rus && this.showingDone
       },
       wordsForDelete() {
-        return this.$store.getters.getdeleteWords
+        return this.$store.getters.getdeleteWords.length != 0
       },
       collection() {
-        return this.paginate(this.abrakadabra)
+        return this.paginate(this.$store.getters.getdeleteWords)
       }
     }
   };
