@@ -73,14 +73,6 @@
     export default {
         data() {
             return {
-                minId: 1,
-                maxId: undefined,
-                rusInput: null,
-                id: 1,
-                seconds: 59,
-                setInt: true,
-                showHelp: false,
-                timeinterval: undefined,
                 dialog: false,
                 eng: undefined,
                 rus: undefined,

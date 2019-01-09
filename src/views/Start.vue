@@ -83,53 +83,6 @@
       getHelp() {
         return (this.showHelp = !this.showHelp);
       },
-      addwords() {
-        this.$store.dispatch("LENGTH_DATA_WORDS").then(length => {
-          let obj = {
-            eng: this.eng,
-            rus: this.rus,
-            length: length
-          };
-          this.$store.dispatch("ADD_NEW_WORDS", obj).then(() => {
-            this.rus = '',
-              this.eng = '';
-            if (this.showingDone == false) {
-              this.showingDone = !this.showingDone
-            }
-          });
-        });
-      },
-      deleteWord() {
-        this.$store.dispatch("deleteWords").then(() => {
-          this.setPage(1);
-          this.hideWordsSection = !this.hideWordsSection
-        })
-      },
-      setPage(p) {
-        this.pagination = this.paginator(this.$store.getters.getdeleteWords.length, p)
-      },
-      paginate(abrakadabra) {
-        return _.slice(abrakadabra, this.pagination.startIndex, this.pagination.endIndex + 1)
-      },
-      paginator(totalItems, currentPage) {
-        var startIndex = (currentPage - 1) * this.perPage,
-          endIndex = Math.min(startIndex + this.perPage - 1, totalItems - 1);
-        return {
-          currentPage: currentPage,
-          startIndex: startIndex,
-          endIndex: endIndex,
-          pages: _.range(1, Math.ceil(totalItems / this.perPage) + 1)
-        };
-      },
-      hideWords() {
-        this.hideWordsSection = false;
-      },
-      machine(m) {
-        console.log(m.id)
-      }
-    },
-    created() {
-      this.setPage(1);
     },
     mounted() {
       this.counterNull();
@@ -144,18 +97,6 @@
       },
       counter() {
         return this.$store.getters.getCounter;
-      },
-      activeBtn() {
-        return !!this.eng && !!this.rus;
-      },
-      activeDone() {
-        return !this.eng && !this.rus && this.showingDone
-      },
-      existWordForDelete() {
-        return this.$store.getters.getdeleteWords.length != 0
-      },
-      collection() {
-        return this.paginate(this.$store.getters.getdeleteWords)
       },
     }
   };
