@@ -34,7 +34,7 @@
                         <v-divider></v-divider>
                         <v-container>
                             <v-layout mt-4 align-center justify-center>
-                                <v-btn v-if="!hideWordsSection" @click="deleteWord" color="error">Показать слова</v-btn>
+                                <v-btn v-if="!hideWordsSection" @click="showDeleteWords" color="error">Показать слова</v-btn>
                                 <v-btn v-else @click="hideWords" color="error">Скрыть слова</v-btn>
                             </v-layout>
                         </v-container>
@@ -45,7 +45,7 @@
                             <v-layout v-if="existWordForDelete" row wrap>
                                 <v-flex xs4 v-for="word in collection" :key="word.id">
                                     {{ word.eng }}
-                                    <v-icon @click="machine(word)" size="15">close</v-icon>
+                                    <v-icon @click="deleteItem(word)" size="15">close</v-icon>
                                 </v-flex>
                                 <v-container align-center>
                                     <v-btn v-for="p in pagination.pages" :key="p.id" @click.prevent="setPage(p)">{{ p }}</v-btn>
@@ -99,7 +99,7 @@
                     });
                 });
             },
-            deleteWord() {
+           showDeleteWords() {
                 this.$store.dispatch("deleteWords").then(() => {
                     this.setPage(1);
                     this.hideWordsSection = !this.hideWordsSection
@@ -124,8 +124,12 @@
             hideWords() {
                 this.hideWordsSection = false;
             },
-            machine(m) {
-                console.log(m.id)
+            deleteItem(m) {
+                this.deleted = _.remove(this.$store.getters.getdeleteWords, function(el) {
+                    console.log(m.id)
+                    return el.id === m.id;
+                });
+                this.setPage(1);
             }
         },
         created() {
