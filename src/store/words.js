@@ -36,7 +36,6 @@ export default {
 
     },
     actions: {
-
         ADD_NEW_WORDS(state, payload) {
             return new Promise((resolve) => {
                 state.commit('maxID', payload.length)
@@ -100,9 +99,7 @@ export default {
                             eng: data.eng,
                             rus: data.rus
                         }
-
                         words.push(word)
-
                     })
                     state.commit('SET_WORDS', words)
                     state.commit('maxID', words.length)

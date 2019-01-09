@@ -5,12 +5,10 @@
                 <v-btn slot="activator" fab dark color="indigo">
                     <v-icon dark>add</v-icon>
                 </v-btn>
-
                 <v-card>
                     <v-card-title class="headline grey lighten-2" primary-title>
                         Добавьте слово
                     </v-card-title>
-
                     <v-content>
                         <v-container>
                             <v-layout style="color:#009688;font-size:20px" align-center justify-center row>Поле для ввода английского слова</v-layout>
@@ -39,7 +37,6 @@
                             </v-layout>
                         </v-container>
 
-
                         <!-- dddddddddddd-->
                         <v-container v-show="hideWordsSection" grid-list-md text-xs-center>
                             <v-layout v-if="existWordForDelete" row wrap>
@@ -51,11 +48,11 @@
                                     <v-btn v-for="p in pagination.pages" :key="p.id" @click.prevent="setPage(p)">{{ p }}</v-btn>
                                 </v-container>
                                 <v-container align-center>
-                                    Displaying from {{ pagination.startIndex }} to {{ pagination.endIndex }}
+                                    Displaying from {{ pagination.startIndex + 1 }} to {{ pagination.endIndex + 1 }}
                                 </v-container>
                             </v-layout>
                             <v-layout v-else row wrap>
-                                <v-card-text align-center justify-center>
+                                <v-card-text style="font-size:20px" class="red--text" align-center justify-center>
                                     Нет добавленных слов!
                                 </v-card-text>
                             </v-layout>
@@ -66,8 +63,6 @@
         </div>
     </v-layout>
 </template>
-
-
 
 <script>
     export default {
@@ -80,6 +75,7 @@
                 perPage: 15,
                 pagination: {},
                 hideWordsSection: false,
+                isWordExist: true
             };
         },
         methods: {
@@ -99,7 +95,7 @@
                     });
                 });
             },
-           showDeleteWords() {
+            showDeleteWords() {
                 this.$store.dispatch("deleteWords").then(() => {
                     this.setPage(1);
                     this.hideWordsSection = !this.hideWordsSection
@@ -108,8 +104,8 @@
             setPage(p) {
                 this.pagination = this.paginator(this.$store.getters.getdeleteWords.length, p)
             },
-            paginate(abrakadabra) {
-                return _.slice(abrakadabra, this.pagination.startIndex, this.pagination.endIndex + 1)
+            paginate(array) {
+                return _.slice(array, this.pagination.startIndex, this.pagination.endIndex + 1)
             },
             paginator(totalItems, currentPage) {
                 var startIndex = (currentPage - 1) * this.perPage,
@@ -126,14 +122,14 @@
             },
             deleteItem(m) {
                 this.deleted = _.remove(this.$store.getters.getdeleteWords, function(el) {
-                    console.log(m.id)
                     return el.id === m.id;
                 });
-                this.setPage(1);
+                this.setPage(2);     // надо сделать чтобы оставалась на этой странице - сначала сделать удаление
+                if (this.$store.getters.getdeleteWords == 0) {
+                    this.isWordExist = false
+                }
+
             }
-        },
-        created() {
-            this.setPage(1);
         },
         computed: {
             activeBtn() {
@@ -143,7 +139,7 @@
                 return !this.eng && !this.rus && this.showingDone
             },
             existWordForDelete() {
-                return this.$store.getters.getdeleteWords.length != 0
+                return this.$store.getters.getdeleteWords.length != 0 && this.isWordExist
             },
             collection() {
                 return this.paginate(this.$store.getters.getdeleteWords)
