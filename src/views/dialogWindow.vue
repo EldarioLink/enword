@@ -100,9 +100,9 @@
             },
             showDeleteWords() { //  Загружаем слова в массив удаляемых слов
                 this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
-                    console.log("how many"+length)
-                           console.log(this.$store.getters.getWords)
-                        this.$store.commit('SET_WORDS_DIALOG', this.$store.getters.getWords);
+                    console.log("how many" + length)
+                    console.log(this.$store.getters.getWords)
+                    this.$store.commit('SET_WORDS_DIALOG', this.$store.getters.getWords);
 
                     this.hideWordsSection = !this.hideWordsSection
                 })
@@ -146,6 +146,8 @@
             showIcon() {
                 return this.$store.getters.isUserAuthenticated
             },
-        }
+
+        },
+
     };
 </script>
