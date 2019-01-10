@@ -13,6 +13,7 @@ export default {
             state.words = payload
         },
         SET_WORDS_DIALOG(state, payload) {
+            console.log("okey")
             state.deleteWords = payload
         },
         INCREMENT_MAXID(state, payload) {
@@ -103,25 +104,28 @@ export default {
         },
 
         LOAD_SAVE_WORDS(state) {      // Загружаем слова из базы
-            state.commit('DELETE_WORDS')
-            Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
-                .get()
-                .then(querySnapshot => {
-                    let words = []
-                    querySnapshot.forEach(s => {
-                        const data = s.data()
-                        let word = {
-                            id: data.id,
-                            eng: data.eng,
-                            rus: data.rus
-                        }
-                        words.push(word)
-                    })
-                    state.commit('SET_WORDS', words)
-                    state.commit('maxID', words.length)
+            return new Promise((resolve) => {
+                state.commit('DELETE_WORDS')
+                Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
+                    .get()
+                    .then(querySnapshot => {
+                        let words = []
+                        querySnapshot.forEach(s => {
+                            const data = s.data()
+                            let word = {
+                                id: data.id,
+                                eng: data.eng,
+                                rus: data.rus
+                            }
+                            words.push(word)
+                        })
+                        state.commit('SET_WORDS', words)
+                        state.commit('maxID', words.length)
+                        resolve()
 
-                })
-                .catch(error => console.log(error))
+                    })
+                    .catch(error => console.log(error))
+            })
         },
         LENGTH_DATA_WORDS(state) {                  // Узнаем длину массива-слов в базе
             return new Promise((resolve) => {

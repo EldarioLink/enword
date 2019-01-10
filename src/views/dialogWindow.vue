@@ -76,7 +76,6 @@
                 rus: undefined,
                 showingDone: false,
                 hideWordsSection: false,
-                isWordExist: true,
                 deleted: [],
                 wordsDeleted: false,
             };
@@ -101,13 +100,10 @@
             },
             showDeleteWords() { //  Загружаем слова в массив удаляемых слов
                 this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
-                    console.log(length)
-                    if (length != 0 && length == this.$store.getters.getWords.length) { //  если новое слово не добавлено, то берем слова изсущ-ей базы
-                        this.$store.commit('SET_WORDS_DIALOG', this.$store.getters.getWords)
-                    } else {
-                        this.$store.dispatch('LOAD_SAVE_WORDS')
-                        this.$store.commit('SET_WORDS_DIALOG', this.$store.getters.getWords)
-                    }
+                    console.log("how many"+length)
+                           console.log(this.$store.getters.getWords)
+                        this.$store.commit('SET_WORDS_DIALOG', this.$store.getters.getWords);
+
                     this.hideWordsSection = !this.hideWordsSection
                 })
             },
@@ -129,9 +125,6 @@
                         }, 1000);
                         this.hideWordsSection = false;
 
-                        if (this.$store.getters.getdeleteWords.length == 0) {
-                            this.isWordExist = false
-                        }
                     });
                 })
             }
@@ -144,7 +137,7 @@
                 return !this.eng && !this.rus && this.showingDone
             },
             existWordForDelete() {
-                return this.$store.getters.getdeleteWords.length != 0 && this.isWordExist
+                return this.$store.getters.getdeleteWords.length != 0
             },
             collection() {
                 this.deleted
