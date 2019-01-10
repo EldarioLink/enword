@@ -2,7 +2,7 @@
     <v-layout justify-end>
         <div class="text-xs-center">
             <v-dialog v-model="dialog" width="900">
-                <v-btn v-if ="showIcon" slot="activator" fab dark color="indigo">
+                <v-btn v-if="showIcon" slot="activator" fab dark color="indigo">
                     <v-icon dark>add</v-icon>
                 </v-btn>
                 <v-card>
@@ -70,10 +70,9 @@
                 eng: undefined,
                 rus: undefined,
                 showingDone: false,
-                perPage: 15,
-                pagination: {},
                 hideWordsSection: false,
-                isWordExist: true
+                isWordExist: true,
+                deleted: []
             };
         },
         methods: {
@@ -87,6 +86,7 @@
                     this.$store.dispatch("ADD_NEW_WORDS", obj).then(() => {
                         this.rus = '',
                             this.eng = '';
+                        this.hideWordsSection = false
                         if (this.showingDone == false) {
                             this.showingDone = !this.showingDone
                         }
@@ -95,7 +95,7 @@
             },
             showDeleteWords() { //  Загружаем слова в массив удаляемых слов
                 this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
-                    if (length != 0) { //  если база существует, то записывает уже с сущ-го массива
+                    if (length != 0 && length == this.$store.getters.getWords.length) { //  если новое слово не добавлено, то берем слова изсущ-ей базы
                         this.$store.commit('SET_WORDS_DIALOG', this.$store.getters.getWords)
                     }
                     this.hideWordsSection = !this.hideWordsSection
@@ -130,9 +130,10 @@
                 return this.$store.getters.getdeleteWords.length != 0 && this.isWordExist
             },
             collection() {
+                this.deleted
                 return this.$store.getters.getdeleteWords
             },
-            showIcon(){
+            showIcon() {
                 return this.$store.getters.isUserAuthenticated
             }
         }

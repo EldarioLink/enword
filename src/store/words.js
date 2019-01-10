@@ -38,9 +38,7 @@ export default {
     actions: {
         ADD_NEW_WORDS(state, payload) {
             return new Promise((resolve) => {
-
                 state.commit('maxID', payload.length)
-
                 state.commit('SET_PROCESSING', true)
                 this.docId = "word" + state.getters.getmaxId
                 let userDataRef = Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords').doc(this.docId)
@@ -65,7 +63,17 @@ export default {
 
         },
         LOAD_WORDS_TO_DB(state, payload) {
-            state.dispatch('DELETE_DATA_WORDS')
+
+            // state.dispatch('DELETE_DATA_WORDS', payload);
+            let wordsDB = []
+            for (var i = 0; i < state.getters.getdeleteWords.length; i++) {
+                var data = state.getters.getdeleteWords[i];
+                data.id = i
+                console.log(data);
+                wordsDB.push(data)
+            }
+            state.commit('SET_WORDS', wordsDB)
+
         },
         LOAD_WORDS(state) {
             Vue.$db.collection('words')
@@ -83,7 +91,6 @@ export default {
                         words.push(word)
                     })
                     state.commit('SET_WORDS', words)
-                    console.log(words.length)
                     state.commit('maxID', words.length)
 
 
@@ -117,7 +124,6 @@ export default {
                 let userDataRef = Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
                 userDataRef.get()
                     .then((data) => {
-                        console.log(data.docs.length)
                         return resolve(data.docs.length)
                     })
             })
@@ -125,7 +131,7 @@ export default {
         DELETE_DATA_WORDS(state, payload) {         // Удаление слов из базы
             if (payload < 100) {                         // Задана ли длина удаляемого массива
                 var asyncLoop = function (o) {
-                    var i = 0;
+                    var i = -1;
                     var loop = function () {
                         i++;
                         if (i > o.length) { return; }
