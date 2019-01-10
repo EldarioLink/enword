@@ -77,8 +77,9 @@ export default {
 
                 }
                 state.commit('SET_WORDS', wordsDB)
+                state.commit('maxID', wordsDB.length)
                 if (state.getters.getdeleteWords.length == 0) {
-                state.dispatch('LOAD_WORDS')
+                    state.dispatch('LOAD_WORDS')
                 }
 
                 resolve()

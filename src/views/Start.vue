@@ -8,7 +8,7 @@
       <v-container>
         <v-layout v-if="words" style="color:#009688;font-size:20px" align-center justify-center row fill-height>{{ words.eng }}</v-layout>
         <v-layout v-else align-center justify-center row fill-height>
-          <v-icon >hourglass_empty</v-icon>
+          <v-icon>hourglass_empty</v-icon>
         </v-layout>
         <v-container>
           <v-layout align-center justify-center row fill-height>
@@ -59,6 +59,7 @@
           Math.floor(
             Math.random() * (this.$store.getters.getmaxId - this.minId)
           ) + this.minId;
+          console.log(this.id)
         this.rusInput = "";
       },
       counterNull() {
