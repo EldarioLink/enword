@@ -13,13 +13,13 @@
                         <v-container>
                             <v-layout style="color:#009688;font-size:20px" align-center justify-center row>Поле для ввода английского слова</v-layout>
                             <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
-                                <input v-model="eng" style="border: solid 1px #009688">
+                                <input v-model="eng" @input="sectionHide" style="border: solid 1px #009688">
                             </v-layout>
                         </v-container>
                         <v-container>
                             <v-layout style="color:#009688;font-size:20px" align-center justify-center row>Поле для ввода перевода</v-layout>
                             <v-layout style="color:#009688;font-size:20px" align-center justify-center row>
-                                <input v-model="rus" style="border: solid 1px #009688">
+                                <input v-model="rus" @input="sectionHide()" style="border: solid 1px #009688">
                             </v-layout>
 
                             <v-layout mt-4 align-center justify-center row>
@@ -91,7 +91,6 @@
                     this.$store.dispatch("ADD_NEW_WORDS", obj).then(() => {
                         this.rus = '',
                             this.eng = '';
-                        this.hideWordsSection = false
                         if (this.showingDone == false) {
                             this.showingDone = !this.showingDone
                         }
@@ -100,17 +99,14 @@
             },
             showDeleteWords() { //  Загружаем слова в массив удаляемых слов
                 this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
-                    console.log("how many" + length)
-                    console.log(this.$store.getters.getWords)
                     this.$store.commit('SET_WORDS_DIALOG', this.$store.getters.getWords);
-
                     this.hideWordsSection = !this.hideWordsSection
                 })
             },
-            hideWords() { //  Скрываем сецию удаляемых слов
+            hideWords() { //   Скрываем сецию удаляемых слов
                 this.hideWordsSection = false;
             },
-            deleteItem(m) { //  Удаляем слова из массива
+            deleteItem(m) { //  Удаляем слова
                 this.deleted = _.remove(this.$store.getters.getdeleteWords, function(el) {
                     return el.id === m.id;
                 });
@@ -127,6 +123,9 @@
 
                     });
                 })
+            },
+            sectionHide() {
+                return this.hideWordsSection = false;
             }
         },
         computed: {
@@ -146,7 +145,6 @@
             showIcon() {
                 return this.$store.getters.isUserAuthenticated
             },
-
         },
 
     };

@@ -13,7 +13,6 @@ export default {
             state.words = payload
         },
         SET_WORDS_DIALOG(state, payload) {
-            console.log("okey")
             state.deleteWords = payload
         },
         INCREMENT_MAXID(state, payload) {

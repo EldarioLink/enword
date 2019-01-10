@@ -59,7 +59,6 @@
           Math.floor(
             Math.random() * (this.$store.getters.getmaxId - this.minId)
           ) + this.minId;
-          console.log(this.id)
         this.rusInput = "";
       },
       counterNull() {
