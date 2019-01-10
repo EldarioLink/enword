@@ -64,16 +64,18 @@ export default {
         },
         LOAD_WORDS_TO_DB(state, payload) {
 
-            // state.dispatch('DELETE_DATA_WORDS', payload);
+            state.dispatch('DELETE_DATA_WORDS', payload);
             let wordsDB = []
             for (var i = 0; i < state.getters.getdeleteWords.length; i++) {
-                var data = state.getters.getdeleteWords[i];
-                data.id = i
-                console.log(data);
-                wordsDB.push(data)
+                var word = state.getters.getdeleteWords[i];
+                word.id = i
+                wordsDB.push(word)
+                let docId = "word" + i
+                let userDataRef = Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords').doc(docId)
+                userDataRef.set(word)
+
             }
             state.commit('SET_WORDS', wordsDB)
-
         },
         LOAD_WORDS(state) {
             Vue.$db.collection('words')
