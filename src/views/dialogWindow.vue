@@ -36,7 +36,7 @@
                             </v-layout>
                             <v-layout v-else align-center justify-center>
                                 <v-btn @click="hideWords" color="error">Скрыть слова</v-btn>
-                                <v-btn @click="saveWordsDB" color="success">ОК</v-btn>
+                                <v-btn @click="saveWordsDB" :disabled="!existWordForDelete" color="success">ОК</v-btn>
                             </v-layout>
 
                         </v-container>
@@ -55,6 +55,11 @@
                                 </v-card-text>
                             </v-layout>
                         </v-container>
+                        <v-container v-show="wordsDeleted" grid-list-md text-xs-center>
+                            <v-card-text style="font-size:20px" class="red--text" align-center justify-center>
+                                Слова обновлены!
+                            </v-card-text>
+                        </v-container>
                     </v-content>
                 </v-card>
             </v-dialog>
@@ -72,7 +77,8 @@
                 showingDone: false,
                 hideWordsSection: false,
                 isWordExist: true,
-                deleted: []
+                deleted: [],
+                wordsDeleted: false,
             };
         },
         methods: {
@@ -95,7 +101,11 @@
             },
             showDeleteWords() { //  Загружаем слова в массив удаляемых слов
                 this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
+                    console.log(length)
                     if (length != 0 && length == this.$store.getters.getWords.length) { //  если новое слово не добавлено, то берем слова изсущ-ей базы
+                        this.$store.commit('SET_WORDS_DIALOG', this.$store.getters.getWords)
+                    } else {
+                        this.$store.dispatch('LOAD_SAVE_WORDS')
                         this.$store.commit('SET_WORDS_DIALOG', this.$store.getters.getWords)
                     }
                     this.hideWordsSection = !this.hideWordsSection
@@ -109,13 +119,20 @@
                     return el.id === m.id;
                 });
 
-                if (this.$store.getters.getdeleteWords == 0) {
-                    this.isWordExist = false
-                }
             },
-            saveWordsDB() { //  Загружаем слова в массив удаляемых слов
+            saveWordsDB() { //
                 this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
-                    this.$store.dispatch("LOAD_WORDS_TO_DB", length).then(() => {});
+                    this.$store.dispatch("LOAD_WORDS_TO_DB", length).then(() => {
+                        this.wordsDeleted = true;
+                        setTimeout(() => {
+                            this.wordsDeleted = false
+                        }, 1000);
+                        this.hideWordsSection = false;
+
+                        if (this.$store.getters.getdeleteWords.length == 0) {
+                            this.isWordExist = false
+                        }
+                    });
                 })
             }
         },
@@ -135,7 +152,7 @@
             },
             showIcon() {
                 return this.$store.getters.isUserAuthenticated
-            }
+            },
         }
     };
 </script>
