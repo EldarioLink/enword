@@ -2,7 +2,7 @@
     <v-layout justify-end>
         <div class="text-xs-center">
             <v-dialog v-model="dialog" width="900">
-                <v-btn slot="activator" fab dark color="indigo">
+                <v-btn v-if ="showIcon" slot="activator" fab dark color="indigo">
                     <v-icon dark>add</v-icon>
                 </v-btn>
                 <v-card>
@@ -31,10 +31,14 @@
                         </v-container>
                         <v-divider></v-divider>
                         <v-container>
-                            <v-layout mt-4 align-center justify-center>
-                                <v-btn v-if="!hideWordsSection" @click="showDeleteWords" color="error">Показать слова</v-btn>
-                                <v-btn v-else @click="hideWords" color="error">Скрыть слова</v-btn>
+                            <v-layout v-if="!hideWordsSection" mt-4 align-center justify-center>
+                                <v-btn @click="showDeleteWords" color="error">Показать слова</v-btn>
                             </v-layout>
+                            <v-layout v-else align-center justify-center>
+                                <v-btn @click="hideWords" color="error">Скрыть слова</v-btn>
+                                <v-btn @click="saveWordsDB" color="success">ОК</v-btn>
+                            </v-layout>
+
                         </v-container>
 
                         <!-- dddddddddddd-->
@@ -44,12 +48,6 @@
                                     {{ word.eng }}
                                     <v-icon @click="deleteItem(word)" size="15">close</v-icon>
                                 </v-flex>
-                                <v-container align-center>
-                                    <v-btn v-for="p in pagination.pages" :key="p.id" @click.prevent="setPage(p)">{{ p }}</v-btn>
-                                </v-container>
-                                <v-container align-center>
-                                    Displaying from {{ pagination.startIndex + 1 }} to {{ pagination.endIndex + 1 }}
-                                </v-container>
                             </v-layout>
                             <v-layout v-else row wrap>
                                 <v-card-text style="font-size:20px" class="red--text" align-center justify-center>
@@ -95,40 +93,30 @@
                     });
                 });
             },
-            showDeleteWords() {
-                this.$store.dispatch("deleteWords").then(() => {
-                    this.setPage(1);
+            showDeleteWords() { //  Загружаем слова в массив удаляемых слов
+                this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
+                    if (length != 0) { //  если база существует, то записывает уже с сущ-го массива
+                        this.$store.commit('SET_WORDS_DIALOG', this.$store.getters.getWords)
+                    }
                     this.hideWordsSection = !this.hideWordsSection
                 })
             },
-            setPage(p) {
-                this.pagination = this.paginator(this.$store.getters.getdeleteWords.length, p)
-            },
-            paginate(array) {
-                return _.slice(array, this.pagination.startIndex, this.pagination.endIndex + 1)
-            },
-            paginator(totalItems, currentPage) {
-                var startIndex = (currentPage - 1) * this.perPage,
-                    endIndex = Math.min(startIndex + this.perPage - 1, totalItems - 1);
-                return {
-                    currentPage: currentPage,
-                    startIndex: startIndex,
-                    endIndex: endIndex,
-                    pages: _.range(1, Math.ceil(totalItems / this.perPage) + 1)
-                };
-            },
-            hideWords() {
+            hideWords() { //  Скрываем сецию удаляемых слов
                 this.hideWordsSection = false;
             },
-            deleteItem(m) {
+            deleteItem(m) { //  Удаляем слова из массива
                 this.deleted = _.remove(this.$store.getters.getdeleteWords, function(el) {
                     return el.id === m.id;
                 });
-                this.setPage(2);     // надо сделать чтобы оставалась на этой странице - сначала сделать удаление
+
                 if (this.$store.getters.getdeleteWords == 0) {
                     this.isWordExist = false
                 }
-
+            },
+            saveWordsDB() { //  Загружаем слова в массив удаляемых слов
+                this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
+                    this.$store.dispatch("LOAD_WORDS_TO_DB", length).then(() => {});
+                })
             }
         },
         computed: {
@@ -142,8 +130,11 @@
                 return this.$store.getters.getdeleteWords.length != 0 && this.isWordExist
             },
             collection() {
-                return this.paginate(this.$store.getters.getdeleteWords)
+                return this.$store.getters.getdeleteWords
             },
+            showIcon(){
+                return this.$store.getters.isUserAuthenticated
+            }
         }
     };
 </script>

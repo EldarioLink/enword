@@ -8,7 +8,7 @@
       <v-container>
         <v-layout v-if="words" style="color:#009688;font-size:20px" align-center justify-center row fill-height>{{ words.eng }}</v-layout>
         <v-layout v-else align-center justify-center row fill-height>
-          <v-icon>hourglass_empty</v-icon>
+          <v-icon >hourglass_empty</v-icon>
         </v-layout>
         <v-container>
           <v-layout align-center justify-center row fill-height>
@@ -35,10 +35,10 @@
     },
     data() {
       return {
-        minId: 1,
+        minId: 0,
         maxId: undefined,
         rusInput: null,
-        id: 1,
+        id: 0,
         seconds: 59,
         setInt: true,
         showHelp: false,
@@ -47,8 +47,6 @@
         eng: undefined,
         rus: undefined,
         showingDone: false,
-        perPage: 15,
-        pagination: {},
         hideWordsSection: false,
       };
     },

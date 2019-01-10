@@ -47,7 +47,7 @@
         // Если рекорд, то сохраняем значение в firebase
         if (this.getmaxCounter < this.counterNow) {
           this.$store.dispatch(
-            "SET_USER_SCORE",
+            "SET_USER_SCORE_DB",
             this.counterNow
           );
         }

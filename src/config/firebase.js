@@ -1,9 +1,8 @@
-export default { 
-        apiKey: "AIzaSyAcbre1LhlyGfOPtN1EUAbpLfynXb-aeKs",
-        authDomain: "englishwords-e0168.firebaseapp.com",
-        databaseURL: "https://englishwords-e0168.firebaseio.com",
-        projectId: "englishwords-e0168",
-        storageBucket: "englishwords-e0168.appspot.com",
-        messagingSenderId: "378786441511" 
- 
-}
+export default {
+        apiKey: "AIzaSyATIjCFGjLDaN3NxrjNcVQLgqVKfMRjKQI",
+        authDomain: "enwoord.firebaseapp.com",
+        databaseURL: "https://enwoord.firebaseio.com",
+        projectId: "enwoord",
+        storageBucket: "enwoord.appspot.com",
+        messagingSenderId: "1036844477275"
+};

@@ -1,5 +1,4 @@
 import firebase from 'firebase'
-import { reject } from 'q';
 
 export default {
     state: {
@@ -69,7 +68,7 @@ export default {
             return new Promise((resolve) => {
                 if (payload) {
                     state.commit('SET_USER', payload.uid);
-                    state.dispatch('LOAD_USER_DATA', payload.uid);
+                    state.dispatch('LOAD_USER_SCORE', payload.uid);
 
                     state
                         .dispatch("LENGTH_DATA_WORDS")

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { resolve } from 'q';
+
 let defaultmaxScore = {
     scoreAndDate: {
         maxScore: 0
@@ -13,9 +13,6 @@ export default {
         highScore: 0
     },
     mutations: {
-        lolo(state, payload) {
-            state.counter = payload;
-        },
         incrementCounter(state) {
             state.counter++
         },
@@ -25,7 +22,7 @@ export default {
         setmaxCounter(state) {
             state.maxCounterGameMax = Math.max(state.maxCounter, state.counter)
         },
-        LOAD_USER_DATA(state, payload) {
+        SET_USER_SCORE(state, payload) {
             state.maxCounter = payload.maxScore
         },
         SET_USER_MAXSCORE(state, payload) {
@@ -36,7 +33,7 @@ export default {
         },
     },
     actions: {
-        LOAD_USER_DATA({ commit }, payload) {
+        LOAD_USER_SCORE({ commit }, payload) {
             commit('SET_PROCESSING', true)
 
             let userDataRef = Vue.$db.collection('userData').doc(payload)
@@ -48,7 +45,7 @@ export default {
                     if (!userData.scoreAndDate)
                         userData.scoreAndDate = {}
 
-                    commit('LOAD_USER_DATA', userData.scoreAndDate)
+                    commit('SET_USER_SCORE', userData.scoreAndDate)
                     commit('SET_PROCESSING', false)
 
                 }).catch((error) => {
@@ -57,7 +54,7 @@ export default {
                 });
 
         },
-        SET_USER_SCORE({ commit, getters }, payload) {
+        SET_USER_SCORE_DB({ commit, getters }, payload) {
             commit('SET_PROCESSING', true)
             let userDataRef = Vue.$db.collection('userData').doc(getters.userId)
 

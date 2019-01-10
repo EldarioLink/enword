@@ -38,8 +38,9 @@ export default {
     actions: {
         ADD_NEW_WORDS(state, payload) {
             return new Promise((resolve) => {
+
                 state.commit('maxID', payload.length)
-                state.commit('INCREMENT_MAXID', 1)
+
                 state.commit('SET_PROCESSING', true)
                 this.docId = "word" + state.getters.getmaxId
                 let userDataRef = Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords').doc(this.docId)
@@ -53,6 +54,7 @@ export default {
                 userDataRef.set(word)
                     .then(() => {
                         state.dispatch('LOAD_SAVE_WORDS').then(() => {
+                            state.commit('INCREMENT_MAXID', 1)
                             resolve()
                         })
                     })
@@ -61,6 +63,9 @@ export default {
                     });
             })
 
+        },
+        LOAD_WORDS_TO_DB(state, payload) {
+            state.dispatch('DELETE_DATA_WORDS')
         },
         LOAD_WORDS(state) {
             Vue.$db.collection('words')
@@ -78,7 +83,7 @@ export default {
                         words.push(word)
                     })
                     state.commit('SET_WORDS', words)
-
+                    console.log(words.length)
                     state.commit('maxID', words.length)
 
 
@@ -86,7 +91,7 @@ export default {
                 .catch(error => console.log(error))
         },
 
-        LOAD_SAVE_WORDS(state) {
+        LOAD_SAVE_WORDS(state) {      // Загружаем слова из базы
             state.commit('DELETE_WORDS')
             Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
                 .get()
@@ -107,34 +112,38 @@ export default {
                 })
                 .catch(error => console.log(error))
         },
-        LENGTH_DATA_WORDS(state) {
+        LENGTH_DATA_WORDS(state) {                  // Узнаем длину массива-слов в базе
             return new Promise((resolve) => {
                 let userDataRef = Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
                 userDataRef.get()
                     .then((data) => {
+                        console.log(data.docs.length)
                         return resolve(data.docs.length)
                     })
             })
         },
-        DELETE_DATA_WORDS(state, payload) {
-            var asyncLoop = function (o) {
-                var i = 0;
-                var loop = function () {
-                    i++;
-                    if (i > o.length) { return; }
-                    o.functionToLoop(loop, i);
+        DELETE_DATA_WORDS(state, payload) {         // Удаление слов из базы
+            if (payload < 100) {                         // Задана ли длина удаляемого массива
+                var asyncLoop = function (o) {
+                    var i = 0;
+                    var loop = function () {
+                        i++;
+                        if (i > o.length) { return; }
+                        o.functionToLoop(loop, i);
+                    }
+                    loop();
                 }
-                loop();
+                asyncLoop({
+                    length: payload,
+                    functionToLoop: function (loop, i) {
+                        Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords').doc('word' + i).delete()
+                        loop()
+                    },
+                });
             }
-            asyncLoop({
-                length: payload,
-                functionToLoop: function (loop, i) {
-                    Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords').doc('word' + i).delete()
-                    loop()
-                },
-            });
+            else { return; }
         },
-        deleteWords(state) {
+        deleteWords(state) {         //
             return new Promise((resolve) => {
                 state.commit('DELETE_WORDS_DIALOG')
                 Vue.$db.collection('userData').doc(state.getters.userId).collection('userWords')
