@@ -41,7 +41,7 @@
 
                         </v-container>
 
-                        <!-- dddddddddddd-->
+                        <!-- dialogWindow -->
                         <v-container v-show="hideWordsSection" grid-list-md text-xs-center>
                             <v-layout v-if="existWordForDelete" row wrap>
                                 <v-flex xs4 v-for="word in collection" :key="word.id">
@@ -112,7 +112,7 @@
                 });
 
             },
-            saveWordsDB() { //
+            saveWordsDB() { // Сохраняем слова в базу
                 this.$store.dispatch('LENGTH_DATA_WORDS').then((length) => {
                     this.$store.dispatch("LOAD_WORDS_TO_DB", length).then(() => {
                         this.wordsDeleted = true;
@@ -120,7 +120,7 @@
                             this.wordsDeleted = false
                         }, 1000);
                         this.hideWordsSection = false;
-
+                        this.deleted.length = 0;
                     });
                 })
             },
